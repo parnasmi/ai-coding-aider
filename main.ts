@@ -1,11 +1,11 @@
 import { readFileSync } from "node:fs";
+import { getTranscriptFilePath } from "./arg_parse";
 
 function readTranscript(filePath: string): string {
   return readFileSync(filePath, "utf-8");
 }
 
-const args = process.argv.slice(2);
-const transcriptFilePath = args[0] || "./transcript.txt";
+const transcriptFilePath = getTranscriptFilePath();
 const transcriptContent = readTranscript(transcriptFilePath);
 
 function countWordFrequencies(text: string): Record<string, number> {
