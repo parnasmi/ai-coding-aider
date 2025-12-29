@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { getTranscriptFilePath } from "./arg_parse";
+import { getTranscriptFilePath, getMinCountThreshold } from "./arg_parse";
 
 function readTranscript(filePath: string): string {
   return readFileSync(filePath, "utf-8");
@@ -26,7 +26,7 @@ function countWordFrequencies(text: string): Record<string, number> {
 
 const wordFrequencies = countWordFrequencies(transcriptContent);
 
-const MIN_COUNT_THRESHOLD = 1;
+const MIN_COUNT_THRESHOLD = getMinCountThreshold();
 
 function printWordFrequencies(wordCounts: Record<string, number>): void {
   Object.entries(wordCounts)
