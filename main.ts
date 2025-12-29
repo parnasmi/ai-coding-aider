@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { analyzeTranscript } from "./llm";
 import { getTranscriptFilePath, getMinCountThreshold } from "./arg_parse";
 import { word_blacklist } from "./constants";
 
@@ -43,3 +44,14 @@ function printWordFrequencies(wordCounts: Record<string, number>): void {
 }
 
 printWordFrequencies(wordFrequencies);
+
+analyzeTranscript(transcriptContent)
+  .then((analysis) => {
+    console.log("\nTranscript Analysis:");
+    console.log("Quick Summary:", analysis.quick_summary);
+    console.log("Bullet Point Highlights:", analysis.bullet_point_highlights);
+    console.log("Sentiment Analysis:", analysis.sentiment_analysis);
+  })
+  .catch((error) => {
+    console.error("Error analyzing transcript:", error);
+  });
