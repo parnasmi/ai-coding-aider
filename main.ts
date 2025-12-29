@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { getTranscriptFilePath, getMinCountThreshold } from "/arg_parse";
+import { getTranscriptFilePath, getMinCountThreshold } from "./arg_parse";
 
 function readTranscript(filePath: string): string {
   return readFileSync(filePath, "utf-8");
