@@ -14,7 +14,7 @@ function countWordFrequencies(text: string): Record<string, number> {
   const words = text.split(/\s+/);
 
   for (let word of words) {
-    word = word.toLowerCase(); // Normalize to lowercase
+    word = word.toLowerCase().replace(/[?.,!]/g, ''); // Normalize to lowercase and strip punctuation
     if (word_blacklist.includes(word)) {
       continue;
     }
