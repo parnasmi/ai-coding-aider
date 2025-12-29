@@ -46,12 +46,13 @@ function printWordFrequencies(wordCounts: Record<string, number>): void {
 
 printWordFrequencies(wordFrequencies);
 
-analyzeTranscript(transcriptContent)
+analyzeTranscript(transcriptContent, wordFrequencies)
   .then((analysis) => {
     console.log("\nTranscript Analysis:");
     console.log("Quick Summary:", analysis.quick_summary);
     console.log("Bullet Point Highlights:", analysis.bullet_point_highlights);
     console.log("Sentiment Analysis:", analysis.sentiment_analysis);
+    console.log("Keywords:", analysis.keywords.join(", "));
   })
   .catch((error) => {
     console.error("Error analyzing transcript:", error);

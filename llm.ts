@@ -3,7 +3,8 @@ import OpenAI from "openai/index";
 import { TranscriptAnalysis, TranscriptAnalysisSchema } from "./dataTypes";
 
 export async function analyzeTranscript(
-  transcript: string
+  transcript: string,
+  wordCounts: Record<string, number>
 ): Promise<TranscriptAnalysis> {
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -16,7 +17,7 @@ export async function analyzeTranscript(
         role: "system",
         content: "You are a helpful assistant analyzing transcripts.",
       },
-      { role: "user", content: transcript },
+      { role: "user", content: JSON.stringify({ transcript, wordCounts }) },
     ],
     response_format: zodResponseFormat(
       TranscriptAnalysisSchema,
