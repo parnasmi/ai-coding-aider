@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { getTranscriptFilePath, getMinCountThreshold } from "./arg_parse";
+import { word_blacklist } from "./constants";
 
 function readTranscript(filePath: string): string {
   return readFileSync(filePath, "utf-8");
@@ -14,6 +15,9 @@ function countWordFrequencies(text: string): Record<string, number> {
 
   for (let word of words) {
     word = word.toLowerCase(); // Normalize to lowercase
+    if (word_blacklist.includes(word)) {
+      continue;
+    }
     if (wordCounts[word]) {
       wordCounts[word] += 1;
     } else {
