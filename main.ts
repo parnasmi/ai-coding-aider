@@ -4,7 +4,9 @@ function readTranscript(filePath: string): string {
   return readFileSync(filePath, "utf-8");
 }
 
-const transcriptContent = readTranscript("./transcript.txt");
+const args = process.argv.slice(2);
+const transcriptFilePath = args[0] || "./transcript.txt";
+const transcriptContent = readTranscript(transcriptFilePath);
 
 function countWordFrequencies(text: string): Record<string, number> {
   const wordCounts: Record<string, number> = {};
