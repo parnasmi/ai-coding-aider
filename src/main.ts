@@ -2,6 +2,7 @@ import "dotenv/config";
 import { readFileSync } from "node:fs";
 import { analyzeTranscript } from "./llm";
 import { getTranscriptFilePath, getMinCountThreshold, getOutputFormat } from "./arg_parse";
+import { wordCountBarChart } from "./chart";
 import { formatAsStr, formatAsJson, formatAsMarkdown } from "./outputFormat";
 import { writeFileSync } from "node:fs";
 import { word_blacklist } from "./constants";
@@ -36,19 +37,16 @@ function countWordFrequencies(text: string): Record<string, number> {
 
 const wordFrequencies = countWordFrequencies(transcriptContent);
 
-const MIN_COUNT_THRESHOLD = getMinCountThreshold();
-
-function printWordFrequencies(wordCounts: Record<string, number>): void {
-  Object.entries(wordCounts)
-    .sort((a, b) => b[1] - a[1])
-    .forEach(([word, count]) => {
-      if (count > MIN_COUNT_THRESHOLD) {
-        console.log(`'${word}': ${count} ${"#".repeat(count)}`);
-      }
-    });
+function filterWordFrequencies(wordCounts: Record<string, number>, threshold: number): Record<string, number> {
+  return Object.fromEntries(
+    Object.entries(wordCounts).filter(([_, count]) => count > threshold)
+  );
 }
 
-printWordFrequencies(wordFrequencies);
+const MIN_COUNT_THRESHOLD = getMinCountThreshold();
+const filteredWordFrequencies = filterWordFrequencies(wordFrequencies, MIN_COUNT_THRESHOLD);
+
+wordCountBarChart(filteredWordFrequencies);
 
 analyzeTranscript(transcriptContent, wordFrequencies)
   .then((analysis) => {
