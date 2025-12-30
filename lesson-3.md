@@ -35,3 +35,8 @@ General theme is as learn ai coding start low-level prompts and slowly remove in
 
 
 **** let's go ahead and update transcript analisys to output a bar chart for word frequencies  instead pseudo hash tag chars
+
+Prompt:
+package.json src/main.ts 
+```CREATE chart.ts: function wordCountBarChart(threshold_word_count: object): show horizontal barchart, sort decending. UPDATE main.ts: REPLACE word count print with wordCountBarChart. MOVE threshold logic AFTER for word loop.
+```
