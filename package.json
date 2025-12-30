@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "dotenv": "^17.2.3",
+    "js-yaml": "^4.1.1",
     "openai": "^6.15.0",
+    "recharts": "^3.6.0",
     "zod": "^4.2.1"
   }
 }
