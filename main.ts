@@ -2,13 +2,17 @@ import "dotenv/config";
 import { readFileSync } from "node:fs";
 import { analyzeTranscript } from "./llm";
 import { getTranscriptFilePath, getMinCountThreshold } from "./arg_parse";
+import { formatAsStr, formatAsJson, formatAsMarkdown } from "./outputFormat";
+import { writeFileSync } from "node:fs";
 import { word_blacklist } from "./constants";
 
 function readTranscript(filePath: string): string {
   return readFileSync(filePath, "utf-8");
 }
 
+const args = process.argv.slice(2);
 const transcriptFilePath = getTranscriptFilePath();
+const outputFormat = args[2] || "text"; // Default to text format
 const transcriptContent = readTranscript(transcriptFilePath);
 
 function countWordFrequencies(text: string): Record<string, number> {
@@ -48,11 +52,28 @@ printWordFrequencies(wordFrequencies);
 
 analyzeTranscript(transcriptContent, wordFrequencies)
   .then((analysis) => {
-    console.log("\nTranscript Analysis:");
-    console.log("Quick Summary:", analysis.quick_summary);
-    console.log("Bullet Point Highlights:", analysis.bullet_point_highlights);
-    console.log("Sentiment Analysis:", analysis.sentiment_analysis);
-    console.log("Keywords:", analysis.keywords.join(", "));
+    let formattedOutput;
+    let fileExtension;
+
+    switch (outputFormat) {
+      case "json":
+        formattedOutput = formatAsJson(analysis);
+        fileExtension = "json";
+        break;
+      case "markdown":
+        formattedOutput = formatAsMarkdown(analysis);
+        fileExtension = "md";
+        break;
+      case "text":
+      default:
+        formattedOutput = formatAsStr(analysis);
+        fileExtension = "txt";
+        break;
+    }
+
+    const outputFilePath = `transcript_analysis.${fileExtension}`;
+    writeFileSync(outputFilePath, formattedOutput);
+    console.log(`Transcript analysis saved to ${outputFilePath}`);
   })
   .catch((error) => {
     console.error("Error analyzing transcript:", error);
