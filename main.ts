@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { readFileSync } from "node:fs";
 import { analyzeTranscript } from "./llm";
-import { getTranscriptFilePath, getMinCountThreshold } from "./arg_parse";
+import { getTranscriptFilePath, getMinCountThreshold, getOutputFormat } from "./arg_parse";
 import { formatAsStr, formatAsJson, formatAsMarkdown } from "./outputFormat";
 import { writeFileSync } from "node:fs";
 import { word_blacklist } from "./constants";
@@ -12,7 +12,7 @@ function readTranscript(filePath: string): string {
 
 const args = process.argv.slice(2);
 const transcriptFilePath = getTranscriptFilePath();
-const outputFormat = args[2] || "text"; // Default to text format
+const outputFormat = getOutputFormat();
 const transcriptContent = readTranscript(transcriptFilePath);
 
 function countWordFrequencies(text: string): Record<string, number> {
