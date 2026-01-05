@@ -64,4 +64,6 @@ Prompt:
 package.json src/arg_parse.ts src/main.ts src/outputFormat.ts
 ```
 UPDATE main.ts, outputFormat.ts, arg_parse.ts: ADD format_as_yaml() MIRROR format_as_json
-```
+```  
+
+By crafting low-level prompts before we move to high-level prmpts and by using IDKs  and prompt phrases you can consistently build high quality acurate ai coding prompts. so we building up out skills we need to control and guide our ai coding assistants to produce the results we trying to get. 
