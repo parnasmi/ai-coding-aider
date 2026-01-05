@@ -10,7 +10,7 @@ export function getOutputFormat(defaultFormat: string = "text"): string {
   return args[2] || defaultFormat;
 }
 
-export function getMinCountThreshold(defaultThreshold: number = 3): number {
+export function getMinCountThreshold(defaultThreshold: number = 10): number {
   const args = process.argv.slice(2);
   return args[1] ? parseInt(args[1], 10) : defaultThreshold;
 }

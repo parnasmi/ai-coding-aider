@@ -56,8 +56,6 @@ const filteredWordFrequencies = filterWordFrequencies(
   MIN_COUNT_THRESHOLD
 );
 
-wordCountBarChart(filteredWordFrequencies);
-
 analyzeTranscript(transcriptContent, wordFrequencies)
   .then((analysis) => {
     let formattedOutput;
@@ -82,6 +80,9 @@ analyzeTranscript(transcriptContent, wordFrequencies)
     const outputFilePath = `transcript_analysis.${fileExtension}`;
     writeFileSync(outputFilePath, formattedOutput);
     console.log(`Transcript analysis saved to ${outputFilePath}`);
+  })
+  .then(() => {
+    wordCountBarChart(filteredWordFrequencies);
   })
   .catch((error) => {
     console.error("Error analyzing transcript:", error);
