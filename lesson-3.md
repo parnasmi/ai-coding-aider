@@ -44,3 +44,9 @@ package.json src/chart.ts src/main.ts transcript-3.txt
 ```
 UPDATE defaultThreshold DEFAULT 10. MOVE wordCountBarChart below analyzeTranscript 
 ```
+
+Prompt:
+package.json src/arg_parse.ts src/chart.ts src/main.ts transcript-3.txt 
+```
+UPDATE `wordCountBarChart` sort ascending 
+```
