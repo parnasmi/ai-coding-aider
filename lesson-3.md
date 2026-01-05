@@ -32,9 +32,15 @@ When we work through there is actually a lot of information we are sending to ai
 
 General theme is as learn ai coding start with low-level prompts and slowly remove information. as you progress slowly remove things. But when you starting when you're beginnig ai coding journey and when you wanna progress and actually get things done, just write the extra charecters. communicate clearly with LLMs, and most importantly communicate clearly with yourself. Know exactly the output you want to see by creaing low-level prompt. 
 
-**** let's go ahead and update transcript analisys to output a bar chart for word frequencies  instead pseudo hash tag chars
+**** let's go  ahead and update transcript analisys to output a bar chart for word frequencies  instead pseudo hash tag chars
 
 Prompt:
 package.json src/main.ts 
 ```CREATE chart.ts: function wordCountBarChart(threshold_word_count: object): show horizontal barchart, sort decending. UPDATE main.ts: REPLACE word count print with wordCountBarChart. MOVE threshold logic AFTER for word loop.
+```
+
+Prompt:
+package.json src/chart.ts src/main.ts transcript-3.txt
+```
+UPDATE defaultThreshold DEFAULT 10. MOVE wordCountBarChart below analyzeTranscript 
 ```
