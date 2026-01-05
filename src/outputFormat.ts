@@ -1,5 +1,5 @@
 import { TranscriptAnalysis } from "./dataTypes";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 export function formatAsStr(analysis: TranscriptAnalysis): string {
   return `
