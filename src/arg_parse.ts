@@ -5,7 +5,7 @@ export function getTranscriptFilePath(
   return args[0] || defaultPath;
 }
 
-export function getOutputFormat(defaultFormat: string = "text"): string {
+export function getOutputFormat(defaultFormat: string = "yaml"): string {
   const args = process.argv.slice(2);
   return args[2] || defaultFormat;
 }

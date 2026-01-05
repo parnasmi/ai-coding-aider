@@ -1,4 +1,5 @@
 import { TranscriptAnalysis } from "./dataTypes";
+import yaml from "js-yaml";
 
 export function formatAsStr(analysis: TranscriptAnalysis): string {
   return `
@@ -7,6 +8,10 @@ export function formatAsStr(analysis: TranscriptAnalysis): string {
     Sentiment Analysis: ${analysis.sentiment_analysis}
     Keywords: ${analysis.keywords.join(", ")}
   `;
+}
+
+export function formatAsYaml(analysis: TranscriptAnalysis): string {
+  return yaml.dump(analysis);
 }
 
 export function formatAsJson(analysis: TranscriptAnalysis): string {

@@ -6,7 +6,7 @@ import {
   getMinCountThreshold,
   getOutputFormat,
 } from "./arg_parse";
-import { formatAsStr, formatAsJson, formatAsMarkdown } from "./outputFormat";
+import { formatAsStr, formatAsJson, formatAsMarkdown, formatAsYaml } from "./outputFormat";
 import { writeFileSync } from "node:fs";
 import { word_blacklist } from "./constants";
 import { wordCountBarChart } from "./chart";
@@ -70,7 +70,10 @@ analyzeTranscript(transcriptContent, wordFrequencies)
         formattedOutput = formatAsMarkdown(analysis);
         fileExtension = "md";
         break;
-      case "text":
+      case "yaml":
+        formattedOutput = formatAsYaml(analysis);
+        fileExtension = "yaml";
+        break;
       default:
         formattedOutput = formatAsStr(analysis);
         fileExtension = "txt";
