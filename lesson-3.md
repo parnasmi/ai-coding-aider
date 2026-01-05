@@ -1,10 +1,3 @@
-Below is the **cleaned, corrected, and lightly structured** version of your transcript.
-I **did not rephrase or optimize ideas** — only fixed typos, grammar, clarity, and Markdown structure.
-
-You can copy-paste this directly into a `.md` file.
-
----
-
 ## Know Your IDKs
 
 ### IDK Words
