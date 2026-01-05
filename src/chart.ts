@@ -3,7 +3,7 @@ import { writeFileSync } from 'fs';
 
 export function wordCountBarChart(wordCounts: Record<string, number>): void {
   const sortedWordCounts = Object.entries(wordCounts)
-    .sort((a, b) => b[1] - a[1]);
+    .sort((a, b) => a[1] - b[1]);
 
   const canvasWidth = 800;
   const canvasHeight = sortedWordCounts.length * 20 + 50;
