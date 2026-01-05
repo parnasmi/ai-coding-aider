@@ -3,7 +3,7 @@
 ### IDK Words
 
 - Create, Update, Delete  
-- Add, Remove, Move, Replace, Save, Mirror  
+- Add, Remove, Move, Replace, Save, Mirror, Make
 - Var, Function, Class, Type, File, Default  
 
 ---
@@ -55,7 +55,7 @@ You can avoid writing tons of code by providing only the function definition. Ho
 
 Using list syntax with commas is powerful. LLMs are great at pattern recognition.
 
-When we work through this, there is actually a lot of information we are sending to the AI coding assistant in the prompt. We stay clear and concise without going into details of *how* to do it.
+When we work through this, there is actually a lot of information we are sending to the AI coding assistant in the prompt. We stay clear and concise without going into details of *how* to do it. 
 
 **Remember:**  
 **WHAT > HOW**
