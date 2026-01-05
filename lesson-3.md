@@ -5,7 +5,6 @@ You can copy-paste this directly into a `.md` file.
 
 ---
 
-```md
 ## Know Your IDKs
 
 ### IDK Words
@@ -196,5 +195,4 @@ package.json src/arg_parse.ts src/main.ts src/outputFormat.ts
 By crafting low-level prompts before moving to high-level prompts, and by using **IDKs** and **prompt phrases**, you can consistently build high-quality, accurate AI coding prompts.
 
 You are building the skills needed to **control and guide** AI coding assistants to produce the results you are trying to get.
-```
 
