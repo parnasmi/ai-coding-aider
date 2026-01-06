@@ -1,0 +1,2 @@
+## Spec based AI coding
+
