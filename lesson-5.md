@@ -24,4 +24,13 @@ So last and most important section
 
 ## Low-Level Tasks
 
-These are individual tasks broken into a numbered list and each one is high-level and low-level prompt. That's right. The spec prompt is effectively a set of  directions followed by a list of prompts. This is an ultra important structure. 
+These are individual tasks broken into a numbered list and each one is high-level and low-level prompt. That's right.
+
+
+
+ The spec prompt is effectively a set of  directions followed by a list of prompts. This is an ultra important structure. 
+ Everything you learnt so far compounding into this powerful spec propmt. The huge breakthrough here is our reasoning model is capable of  generating every single task we have here. It's running its own internal chain of thought also known as a prompt chain. The key aspect of low-level task is that it's ordered from start to finish. Ordered task lets us do a couple of things. they allow us communicate with the individual prompts and their outcome in stacking compounding fashion. So we can refer  content of previous prompt and later prompts. 
+
+ Type based ai coding is massive powerful unlock. Data types, interfaces, classes are a fantastic way to communicate information to a llm. as discussed in l3 these are IDKs, right? Types, functions,   variables, files, these are all things have strong refernce point, strong locations and strong meaning associated with them.
+
+ This is a power of  having a list of tasks that can be executed by powerful reasoning model in order thanks to our specification document.  

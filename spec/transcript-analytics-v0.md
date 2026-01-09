@@ -1,4 +1,4 @@
-# Transcript Analytics v0 Specification
+# Transcript Analytics v0 — TypeScript / Node.js Specification
 
 ## High-Level Objective
 
@@ -6,35 +6,39 @@
 
 ## Mid-Level Objective
 
-- Build a python MVP typer CLI application.
-- Accept a path to a text file.
-- Count the frequency of each word in a file, filter out common words, and limit by count threshold.
-- Use an openai chat completion with structured output analyze the transcript and word counts.
-- Rich print the frequency of each word to the terminal and the transcript analysis.
+- Build a TypeScript Node.js CLI application
+- Accept a path to a text file
+- Count the frequency of each word in a file, filter out common words, and limit by count threshold
+- Use an OpenAI chat completion with structured output to analyze the transcript and word counts
+- Print:
+    - word frequencies
+    - transcript analysis to the terminal
 
 ## Implementation Notes
-- No need to import any external libraries see pyproject.toml for dependencies.
-- Comment every function.
-- For typer commands add usage examples starting with uv run main ‹func name dash sep and params>
-- When code block is given in low-level tasks, use it without making changes (Task 4).
-- Carefully review each low-level task for exact code changes.
+- Use Node.js + TypeScript
+- Use only libraries already present in package.json
+- Use zod for runtime-validated structured outputs
+- Use process.argv or a lightweight CLI pattern (no Typer)
+- Comment every function
+- When code blocks are provided in low-level tasks, use them without modification
+- Carefully review each low-level task for exact code changes
 
 ## Context
 
 ### Beginning context
 
-- `src/spec_based__ai_coding/main.py`
-- `pyproject.toml` (readonly) 
+- `./spec_based__ai_coding/mainSpec.ts`
+- `package.json` (readonly) 
 
 
 ### Ending context
 
-- `src/spec_based_ai_coding/main-py`
-- `pyproject.toml`
-- `src/spec_based_ai_coding/llm.py` (new file)
-- `src/spec_based_ai_coding/word_counter.py` (new file)
-- `src/spec_based_ai_coding/data_types-py` (new file)
-- `src/spec_based_ai_coding/constants.py` (new file)
+- `./spec_based_ai_coding/mainSpec.ts`
+- `package.json`
+- `./spec_based_ai_coding/llmSpec.ts` (new file)
+- `./spec_based_ai_coding/wordCounterSpec.ts` (new file)
+- `./spec_based_ai_coding/dataTypesSpec.ts` (new file)
+- `./spec_based_ai_coding/constantsSpec.ts` (new file)
 
 
 ## Low-Level Tasks
@@ -42,35 +46,113 @@
 
 1. Create common word blacklist.
 ```aider
-CREATE src/spec_based_ai_coding/constants.py:
-    CREATE COMMON_WORDS_BLACKLIST = ['the', 'and', ...add 50 more common words]
+CREATE ./spec_based_ai_coding/constantsSpec.ts:
+    EXPORT const COMMON_WORDS_BLACKLIST = [
+      'the', 'and', 'is', 'to', 'of', 'a', 'in', 'that', 'it', 'on',
+      ...add 50 more common English words
+    ]
 ```
 
 2. Create our data types.
 ```aider
-CREATE src/spec_based_ai_coding/data_types.py:
-    CREATE pydantic types:
-        WordCounts (BaseModel): {count_to_word_map: Dict[str, int]},
-        TranscriptAnalysis (BaseModel): {
-            quick_summary: str
-            bullet_point_highlights: List[str] 
-            sentiment_analysis: str
-            keywords: List[str]
-        }
+CREATE ./spec_based_ai_coding/dataTypesSpec.ts:
+    CREATE TypeScript types and zod schemas:
+
+    EXPORT type WordCounts = {
+        countToWordMap: Record<string, number>
+    }
+
+    EXPORT type TranscriptAnalysis = {
+        quick_summary: string
+        bullet_point_highlights: string[]
+        sentiment_analysis: string
+        keywords: string[]
+    }
+
+    EXPORT const TranscriptAnalysisSchema = z.object({
+        quick_summary: z.string(),
+        bullet_point_highlights: z.array(z.string()),
+        sentiment_analysis: z.string(),
+        keywords: z.array(z.string())
+    })
+
 ```
+
 3. Create our word counter & filter out & limit by count threshold.
 ```aider
-CREATE src/spec_based_ai_coding/word_counter.py:
-CREATE word_counter(script: str, min_count_threshold: int = 10) → WordCounts:
-    Remove punctuation from script and make all words lowercase, 
-    Use the COMMON_WORDS_BLACKLIST to filter out common words,
-    Only include words that are greater than the min_count_threshold.
-    Sort descending by count
+CREATE ./spec_based_ai_coding/wordCounterSpec.ts:
+    CREATE function wordCounter(
+        script: string,
+        minCountThreshold: number = 10
+    ): WordCounts
+
+    - Remove punctuation
+    - Convert all words to lowercase
+    - Split by whitespace
+    - Filter words using COMMON_WORDS_BLACKLIST
+    - Count word occurrences
+    - Only include words with count > minCountThreshold
+    - Sort results descending by count
+
 ```
 
 4. Create our LLM function using the code block below.
-```python
-# CREATE src/spec_based_ai_coding/Lm.py: Use code block below no changes.
+```js
+# CREATE ./spec_based_ai_coding/llmSpec.ts: Use code block below no changes.
+
+import { zodResponseFormat } from "openai/helpers/zod";
+import OpenAI from "openai/index";
+import { TranscriptAnalysis, TranscriptAnalysisSchema } from "./dataTypes";
+
+export async function analyzeTranscript(
+  transcript: string,
+  wordCounts: Record<string, number>
+): Promise<TranscriptAnalysis> {
+  const client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  const completion = await client.chat.completions.parse({
+    model: "gpt-4o-2024-08-06",
+    messages: [
+      {
+        role: "system",
+        content: "You are a helpful assistant analyzing transcripts.",
+      },
+      { role: "user", content: JSON.stringify({ transcript, wordCounts }) },
+    ],
+    response_format: zodResponseFormat(
+      TranscriptAnalysisSchema,
+      "transcript_analysis"
+    ),
+  });
+
+  const message = completion.choices[0]?.message;
+  if (message?.parsed) {
+    return message.parsed;
+  } else {
+    throw new Error("Failed to parse transcript analysis");
+  }
+}
+```
 
 
 5. Update our main function to use new count and analysis functions.
+```aider
+UPDATE ./spec_based_ai_coding/mainSpec.ts:
+    CREATE a Node.js CLI entry point:
+
+    - Parse arguments from process.argv:
+        pathToTranscriptFile
+        minCountThreshold (default 10)
+
+    - Read file using fs/promises
+    - Run wordCounter
+    - Run analyzeTranscript
+    - Print results to terminal:
+        <word>: ###
+        where ### is count
+
+```
+
+6. Create readme.md file which is documentation of the application which has all implementation details implemented so far and instructions how to use this application.
