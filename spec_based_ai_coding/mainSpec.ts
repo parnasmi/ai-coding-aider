@@ -26,9 +26,9 @@ async function main() {
   // Count and filter word frequencies
   const { countToWordMap } = wordCounter(transcript, minCountThreshold);
 
-  // Print word frequencies: "<word>: ###"
+  // Print word frequencies as "<word>: ###" where # is repeated count times
   for (const [word, count] of Object.entries(countToWordMap)) {
-    console.log(`${word}: ${count}`);
+    console.log(`${word}: ${"#".repeat(count as any)}`);
   }
 
   // Analyze transcript and print the structured result
