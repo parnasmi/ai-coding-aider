@@ -102,7 +102,7 @@ CREATE ./spec_based_ai_coding/wordCounterSpec.ts:
 
 import { zodResponseFormat } from "openai/helpers/zod";
 import OpenAI from "openai/index";
-import { TranscriptAnalysis, TranscriptAnalysisSchema } from "./dataTypes";
+import { TranscriptAnalysis, TranscriptAnalysisSchema } from "./dataTypesSpec";
 
 export async function analyzeTranscript(
   transcript: string,
