@@ -5,6 +5,19 @@ import { analyzeTranscript } from "./llmSpec";
 import { createBarChart, createPieChart, createLineChart } from "./chartSpec";
 import { formatAsTxt, formatAsJson, formatAsMd, formatAsYaml } from "./outputFormatSpec";
 
+const CHART_TYPES = new Set(["bar", "pie", "line"]);
+const OUTPUT_EXTS = new Set([".txt", ".json", ".md", ".yaml", ".yml"]);
+
+function getFlagValue(args: string[], name: string): string | undefined {
+  const long = `--${name}`;
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === long) return args[i + 1]; // --name value
+    if (arg.startsWith(long + "=")) return arg.slice(long.length + 1); // --name=value
+  }
+  return undefined;
+}
+
 /**
  * CLI entry point:
  * - Args: <path-to-transcript> [minCountThreshold=10]
@@ -15,15 +28,33 @@ async function main() {
   const [, , pathToTranscriptFile, minCountArg] = process.argv;
 
   const args = process.argv.slice(2);
-  const chartIdx = args.indexOf("--chart");
-  const chartType = chartIdx !== -1 ? args[chartIdx + 1] : undefined;
 
-  const outIdx = args.indexOf("--output-file");
-  const outputFilePath = outIdx !== -1 ? args[outIdx + 1] : undefined;
+  const chartTypeFromFlag = getFlagValue(args, "chart");
+  let outputFilePath = getFlagValue(args, "output-file");
+
+  // Positional fallback support: <path> <threshold> [chart] [output]
+  const nonFlagArgs = args.filter((a) => !a.startsWith("--"));
+  let chartType = chartTypeFromFlag?.toLowerCase();
+
+  if (!chartType && nonFlagArgs[2] && CHART_TYPES.has(nonFlagArgs[2].toLowerCase())) {
+    chartType = nonFlagArgs[2].toLowerCase();
+  }
+
+  if (!outputFilePath && nonFlagArgs[3]) {
+    const val = nonFlagArgs[3];
+    const low = val.toLowerCase().replace(/^\./, "");
+    if (["txt", "json", "md", "yaml", "yml"].includes(low)) {
+      // bare extension -> default filename
+      outputFilePath = `transcript_analysis.${low === "yml" ? "yaml" : low}`;
+    } else {
+      // treat as a path possibly containing an extension
+      outputFilePath = val;
+    }
+  }
 
   if (!pathToTranscriptFile) {
     console.error(
-      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line>] [--output-file <path.(txt|json|md|yaml)>]"
+      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line] [txt|json|md|yaml]"
     );
     process.exit(1);
   }
@@ -60,16 +91,27 @@ async function main() {
   console.log("Transcript Analysis:", analysis);
 
   if (outputFilePath) {
-    const ext = extname(outputFilePath).toLowerCase();
-    let content: string | undefined;
+    let ext = extname(outputFilePath).toLowerCase();
 
+    // Handle bare extension values like "yaml" (no dot/path)
+    if (!ext) {
+      const low = outputFilePath.toLowerCase().replace(/^\./, "");
+      if (["txt", "json", "md", "yaml", "yml"].includes(low)) {
+        ext = low === "yml" ? ".yaml" : `.${low}`;
+        if (!/[\/\\]/.test(outputFilePath)) {
+          outputFilePath = `transcript_analysis${ext}`;
+        }
+      }
+    }
+
+    let content: string | undefined;
     if (ext === ".txt") {
       content = formatAsTxt(analysis, { countToWordMap });
     } else if (ext === ".json") {
       content = formatAsJson(analysis, { countToWordMap });
     } else if (ext === ".md") {
       content = formatAsMd(analysis, { countToWordMap });
-    } else if (ext === ".yaml") {
+    } else if (ext === ".yaml" || ext === ".yml") {
       content = formatAsYaml(analysis, { countToWordMap });
     } else {
       console.error('Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml".');
@@ -77,6 +119,7 @@ async function main() {
     }
 
     await writeFile(outputFilePath, content!, "utf-8");
+    console.log(`Wrote output to ${outputFilePath}`);
   }
 }
 
