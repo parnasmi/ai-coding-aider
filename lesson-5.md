@@ -46,3 +46,9 @@ These are individual tasks broken into a numbered list and each one is high-leve
  Implementation Notes.
 
  so, technical details, dependencies, coding stantdarts and just other informations. This is where we can kind of be more specific this where guide our reasoning model, this where we can be more perscriptive about minor notes or tweaks that we want our assistant be aware of. 
+
+ ==
+
+ What we want is we gonna setting up patterns for use so that  every piece of compute, every autocompleter, every prompt, every coding assistant, they also to understand language of your speaking, why, because your language is consistant, because your language is information reach. 
+
+ When you start setting up these patterns you start speak in a reusable language that you know your computer more specifically  lang models understand. This is the power of consistancy, power of pattern recongnition and it's power of IDKs. So, you can see everything we are doing here is stacking up word speaking the language of  llms. 
