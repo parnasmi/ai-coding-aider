@@ -52,3 +52,13 @@ These are individual tasks broken into a numbered list and each one is high-leve
  What we want is we gonna setting up patterns for use so that  every piece of compute, every autocompleter, every prompt, every coding assistant, they also to understand language of your speaking, why, because your language is consistant, because your language is information reach. 
 
  When you start setting up these patterns you start speak in a reusable language that you know your computer more specifically  lang models understand. This is the power of consistancy, power of pattern recongnition and it's power of IDKs. So, you can see everything we are doing here is stacking up word speaking the language of  llms. 
+
+ It might seem like a disadvantage having to wait for a reasoning model to return, but it actually helps you to think ahead, there is always something else you can be doing to progress your engineering. Including writing your next specification prompt. or setting up your secondary assitant like we can do write now, get ready to iterate on whatever result are architect instance gives us.
+
+ This technique can run on any codebase you have, any single codebase you have. All about putting together great plan and you know using aider as a powerfull code editing tool. And to be clear I know we are taking bored to aider specific things. but this architect model pattern is simple. You have a draft a draft prompt and you have an execution prompt. 
+
+ This is one of the techniques in the course that can take some time and effort to understand and use. it's critically important to take some time to understand and to write out spec prompts. Write this idea of spec prompt. Planning your work and handing that of to powerful reasoning model. You want to spent time to understant and use this. 
+
+ Reasoning models are particularly advsntage  to writing and generating massive amount of code. 
+
+ As you write more spec docs, you start to notice something incredible. The spec will get you 80 percent of the way there. Then you will get to 85%, then 90 and as you improve as you learn how to write this information rich prompts, in right order, with the right information, writing with right context, eventually it will hit 100 percent. Once it happens to you couple of times, you will have a massive aha moments. Whe you wirte perfect spec prompt and llm interprets it perfectly AND you make 5-10-20 multiple edits at once. That's a moment you transform into an engineer of future. I hope you can see how and why. 
