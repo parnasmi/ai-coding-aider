@@ -24,9 +24,9 @@ def new_chart_type(description: str):
             "new-chart-type.md not found in current directory - please make sure it exists"
         )
     with open (spec_path, "r") as spec_file:
-        spec_content = spec_file. read ()
+        spec_content = spec_file.read()
     # Include the description in the spec prompt
-    spec_prompt = spec_content. replace("<description>", description)
+    spec_prompt = spec_content.replace("<description>", description)
 
     # Setup BIG THREE: context, prompt, and model
     # Files to be edited
