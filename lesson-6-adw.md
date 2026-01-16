@@ -16,5 +16,14 @@ To scale your AI coding capabilities even further you can use AI developer workf
 
  You can now using an AI coding assitants like aider things like everything working through, everything been learning throughout this course you know the capabilities to write re-usable AI coding assistants build to solve specific problems extremely well. 
 
-  
+  ADW is a small  piece of code that wraps AI coding assistant that can take in parametrs. it's a reusable ai coding assistant built to solve one problem extraordinary well. 
 
+  Now you have abilities to solve any class of engineering problems across your codebases in a reusable fashion. As long as your pattern you can deploy ADWs. 
+
+  The only true limitation here the only true limitation now is your imagination, your abilities to hit the three big bullseye and the surrounding code that you have setup  your codebase, right? 
+
+  of course, over time your codebases change,you might want make tweaks to your ai developer workflow. THat's fine, you can that's completely accessable here. you can commit this code to your repository, you can do anything you want with this code. it is just code. but this is a code is different. this code works for you. this code operates you, this code writes code for you. it solves problems for you. This is a ai developer workflow. This is advanced ai coding. 
+
+  NOw you have a technique, to help you scale your ai coding even further. Now you can write re-usable ai coding assitants that solve a specific set of problems very well. 
+
+  Using aider we can run everything in architect mode. For this simpler spec prompt with only two steps, we don't need powerfull reasoning model to solve this problem. But it does help to use architect mode to increase accuracy just a little bit and improve the performance of the ai developer workflow. 
