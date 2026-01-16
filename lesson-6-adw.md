@@ -10,4 +10,11 @@ To scale your AI coding capabilities even further you can use AI developer workf
 
  1 st Principal - KISS
 
- Aiders secret that you can AI code programmatically to automate entire classes of engineering work. Application of this is absolutely insanely massive. This means you can run aider like you would run any programm. You can pass state and solve an entire set of engineering promlems in a signle command.  
+ Aiders secret that you can AI code programmatically to automate entire classes of engineering work. Application of this is absolutely insanely massive. This means you can run aider like you would run any programm. You can pass state and solve an entire set of engineering problems in a single command.  
+
+ We just automated small task and we never have to do this again. This is the beginning of the edge.  
+
+ You can now using an AI coding assitants like aider things like everything working through, everything been learning throughout this course you know the capabilities to write re-usable AI coding assistants build to solve specific problems extremely well. 
+
+  
+
