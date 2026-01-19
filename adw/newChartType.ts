@@ -28,7 +28,8 @@ function newChartType(description: string) {
 
   const args = [
     "--model", "gemini/gemini-3-flash-preview",
-    "--edit-format", "architect",
+    "--architect",
+  "--edit-format", "architect",
     "--yes",
     "--no-auto-commits",
     "--no-suggest-shell-commands",
