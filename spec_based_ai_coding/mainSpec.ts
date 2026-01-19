@@ -2,11 +2,11 @@ import { readFile, writeFile } from "fs/promises";
 import { extname } from "path";
 import { wordCounter } from "./wordCounterSpec";
 import { analyzeTranscript } from "./llmSpec";
-import { createBarChart, createPieChart, createLineChart } from "./chartSpec";
-import { formatAsTxt, formatAsJson, formatAsMd, formatAsYaml } from "./outputFormatSpec";
+import { createBarChart, createPieChart, createLineChart, createBubbleChart, createTopPieChart, createRadialBarChart } from "./chartSpec";
+import { formatAsTxt, formatAsJson, formatAsMd, formatAsYaml, formatAsHtml } from "./outputFormatSpec";
 
-const CHART_TYPES = new Set(["bar", "pie", "line"]);
-const OUTPUT_EXTS = new Set([".txt", ".json", ".md", ".yaml", ".yml"]);
+const CHART_TYPES = new Set(["bar", "pie", "line", "bubble", "top-pie", "radial-bar"]);
+const OUTPUT_EXTS = new Set([".txt", ".json", ".md", ".yaml", ".yml", ".html"]);
 
 function getFlagValue(args: string[], name: string): string | undefined {
   const long = `--${name}`;
@@ -43,7 +43,7 @@ async function main() {
   if (!outputFilePath && nonFlagArgs[3]) {
     const val = nonFlagArgs[3];
     const low = val.toLowerCase().replace(/^\./, "");
-    if (["txt", "json", "md", "yaml", "yml"].includes(low)) {
+    if (["txt", "json", "md", "yaml", "yml", "html"].includes(low)) {
       // bare extension -> default filename
       outputFilePath = `transcript_analysis.${low === "yml" ? "yaml" : low}`;
     } else {
@@ -54,7 +54,7 @@ async function main() {
 
   if (!pathToTranscriptFile) {
     console.error(
-      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line] [txt|json|md|yaml]"
+      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial-bar>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial-bar] [txt|json|md|yaml|html]"
     );
     process.exit(1);
   }
@@ -80,8 +80,14 @@ async function main() {
       createPieChart({ countToWordMap });
     } else if (ct === "line") {
       createLineChart({ countToWordMap });
+    } else if (ct === "bubble") {
+      createBubbleChart({ countToWordMap });
+    } else if (ct === "top-pie") {
+      createTopPieChart({ countToWordMap });
+    } else if (ct === "radial-bar") {
+      createRadialBarChart({ countToWordMap });
     } else {
-      console.error('Unsupported chart type. Use one of: "bar", "pie", "line".');
+      console.error('Unsupported chart type. Use one of: "bar", "pie", "line", "bubble", "top-pie", "radial-bar".');
       process.exit(1);
     }
   }
@@ -96,7 +102,7 @@ async function main() {
     // Handle bare extension values like "yaml" (no dot/path)
     if (!ext) {
       const low = outputFilePath.toLowerCase().replace(/^\./, "");
-      if (["txt", "json", "md", "yaml", "yml"].includes(low)) {
+      if (["txt", "json", "md", "yaml", "yml", "html"].includes(low)) {
         ext = low === "yml" ? ".yaml" : `.${low}`;
         if (!/[\/\\]/.test(outputFilePath)) {
           outputFilePath = `transcript_analysis${ext}`;
@@ -113,8 +119,10 @@ async function main() {
       content = formatAsMd(analysis, { countToWordMap });
     } else if (ext === ".yaml" || ext === ".yml") {
       content = formatAsYaml(analysis, { countToWordMap });
+    } else if (ext === ".html") {
+      content = formatAsHtml(analysis, { countToWordMap });
     } else {
-      console.error('Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml".');
+      console.error('Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html".');
       process.exit(1);
     }
 

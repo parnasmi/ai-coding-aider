@@ -85,3 +85,36 @@ export function formatAsYaml(
   };
   return yaml.dump(data);
 }
+
+export function formatAsHtml(
+  transcriptAnalysis: TranscriptAnalysis,
+  wordCounts: WordCounts
+): string {
+  const lines: string[] = [];
+  lines.push("<!DOCTYPE html>");
+  lines.push("<html>");
+  lines.push("<head><title>Transcript Analysis</title></head>");
+  lines.push("<body>");
+  lines.push("<h1>Transcript Analysis</h1>");
+  lines.push("<h2>Quick Summary</h2>");
+  lines.push(`<p>${transcriptAnalysis.quick_summary}</p>`);
+  lines.push("<h2>Bullet Point Highlights</h2>");
+  lines.push("<ul>");
+  for (const bp of transcriptAnalysis.bullet_point_highlights) {
+    lines.push(`<li>${bp}</li>`);
+  }
+  lines.push("</ul>");
+  lines.push("<h2>Sentiment Analysis</h2>");
+  lines.push(`<p>${transcriptAnalysis.sentiment_analysis}</p>`);
+  lines.push("<h2>Keywords</h2>");
+  lines.push(`<p>${transcriptAnalysis.keywords.join(", ")}</p>`);
+  lines.push("<h2>Word Counts</h2>");
+  lines.push("<ul>");
+  for (const [word, count] of Object.entries(wordCounts.countToWordMap)) {
+    lines.push(`<li>${word}: ${count}</li>`);
+  }
+  lines.push("</ul>");
+  lines.push("</body>");
+  lines.push("</html>");
+  return lines.join("\n");
+}
