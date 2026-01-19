@@ -1,9 +1,10 @@
-import { spawnSync } from "child_process";
+import { execSync } from "child_process";
 import { existsSync, readFileSync } from "fs";
 import * as path from "path";
 
 /**
  * Create a new chart type based on a markdown spec + description.
+ * @param description Description of the new chart type
  */
 function newChartType(description: string) {
   if (!description) {
@@ -15,48 +16,60 @@ function newChartType(description: string) {
   const specPath = path.join(projectRoot, "spec", "new-chart-type.md");
 
   if (!existsSync(packageJsonPath)) {
-    throw new Error("package.json not found – run from project root");
+    throw new Error(
+      "package.json not found in current directory – run from project root"
+    );
   }
 
   if (!existsSync(specPath)) {
-    throw new Error("spec/new-chart-type.md not found");
+    throw new Error(
+      "spec/new-chart-type.md not found – please ensure it exists"
+    );
   }
 
-  // Read and inject description
+  // Read and inject description into spec
   const specContent = readFileSync(specPath, "utf-8");
   const specPrompt = specContent.replace("<description>", description);
 
-  const args = [
-    "--model", "gemini/gemini-3-flash-preview",
-    "--architect",
-  "--edit-format", "architect",
+  /**
+   * BIG THREE
+   */
+
+  // Editable files
+  const contextEditable = [
+    "spec_based_ai_coding/mainSpec.ts",
+    "spec_based_ai_coding/chartSpec.ts",
+  ];
+
+  // Read-only context
+  const contextReadOnly = [
+    "spec_based_ai_coding/dataTypesSpec.ts",
+    "package.json",
+  ];
+
+  /**
+   * Aider command (architect + diff style)
+   */
+  const command = [
+    "aider",
+    "--model gemini/gemini-3-flash-preview",
+    "--edit-format architect",
     "--yes",
     "--no-auto-commits",
     "--no-suggest-shell-commands",
-
-    // editable
-    "spec_based_ai_coding/mainSpec.ts",
-    "spec_based_ai_coding/chartSpec.ts",
-
-    // read-only
-    "--read", "spec_based_ai_coding/dataTypesSpec.ts",
-    "--read", "package.json",
-
-    // read prompt from stdin
-    "--message", "-"
-  ];
+    ...contextEditable.map((f) => `"${f}"`),
+    ...contextReadOnly.map((f) => `--read "${f}"`),
+    "--message",
+    `"${specPrompt.trim()}"`,
+  ].join(" ");
 
   console.log("Running AI Developer Workflow: new chart type");
+  console.log(command);
 
-  const result = spawnSync("aider", args, {
-    stdio: ["pipe", "inherit", "inherit"],
+  execSync(command, {
+    stdio: "inherit",
     env: process.env,
-    input: specPrompt
   });
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
 }
 
 // CLI entry

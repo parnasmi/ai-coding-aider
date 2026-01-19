@@ -163,3 +163,87 @@ export function createLineChart(wordCounts: WordCounts): void {
   const buffer = canvas.toBuffer("image/png");
   writeFileSync("word_count_chart_line.png", buffer);
 }
+
+/**
+ * Creates a bubble chart where each word is represented by a circle.
+ * The size of the bubble is proportional to the word count, with exaggerated scaling.
+ * Bubbles are colored based on their frequency quartile (top=green, bottom=red, middle=blue).
+ * The word text is centered within each bubble.
+ * The resulting chart is saved as 'word_count_chart_bubble.png'.
+ * 
+ * @param wordCounts - The word frequency data to visualize.
+ */
+export function createBubbleChart(wordCounts: WordCounts): void {
+  const entries = computeSortedEntries(wordCounts);
+  const n = entries.length;
+  if (n === 0) return;
+
+  const width = 1000;
+  const height = 1000;
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+
+  // Fill background with white
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, width, height);
+
+  const maxCount = Math.max(...entries.map(([, c]) => c));
+  
+  let curX = 60;
+  let curY = 60;
+  let maxRowHeight = 0;
+  const padding = 20;
+
+  entries.forEach(([word, count], i) => {
+    // Exaggerate bubble sizes by using a combination of linear and base size
+    const radius = (count / maxCount) * 80 + 20;
+    const diameter = radius * 2;
+
+    // Wrap to next row if we exceed canvas width
+    if (curX + diameter > width - 60) {
+      curX = 60;
+      curY += maxRowHeight + padding;
+      maxRowHeight = 0;
+    }
+
+    // If we exceed canvas height, we stop drawing
+    if (curY + diameter > height - 60) return;
+
+    const centerX = curX + radius;
+    const centerY = curY + radius;
+
+    // Draw the bubble with quartile color and some transparency
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.fillStyle = quartileColor(i, n);
+    ctx.globalAlpha = 0.7;
+    ctx.fill();
+    
+    // Draw bubble border
+    ctx.globalAlpha = 1.0;
+    ctx.strokeStyle = "rgba(0,0,0,0.2)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Overlay the word in the center
+    ctx.fillStyle = "black";
+    // Adjust font size based on bubble radius
+    const fontSize = Math.max(10, radius / 2.5);
+    ctx.font = `bold ${fontSize}px sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    
+    // Simple text clipping/truncation if word is too long for bubble
+    let displayWord = word;
+    if (ctx.measureText(word).width > diameter - 10) {
+        displayWord = word.substring(0, Math.floor(radius / 5)) + "..";
+    }
+    ctx.fillText(displayWord, centerX, centerY);
+
+    curX += diameter + padding;
+    maxRowHeight = Math.max(maxRowHeight, diameter);
+  });
+
+  const buffer = canvas.toBuffer("image/png");
+  writeFileSync("word_count_chart_bubble.png", buffer);
+}

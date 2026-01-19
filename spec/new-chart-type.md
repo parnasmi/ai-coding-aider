@@ -35,21 +35,18 @@
 ## Low-Level Tasks
 > Ordered from start to finish
 
-1. Create a New Chart Function
+1. Create a New Chart Function:
 
-```aider
     UPDATE spec_based_ai_coding/chartSpec.ts:
         ADD a new function:
             create_<chart_type>_chart(wordCounts: WordCounts)
 
     Implement the chart based on the following description:
-    "<description>"
-```
+    <description>
 
-2. Update the CLI Application
-```aider
+2. Update the CLI Application:
+
     UPDATE spec_based_ai_coding/mainSpec.ts:
         UPDATE the chart handling logic:
             ADD the new chart type to the chartType parameter
             Call the new chart function when selected
-```
