@@ -2,10 +2,10 @@ import { readFile, writeFile } from "fs/promises";
 import { extname } from "path";
 import { wordCounter } from "./wordCounterSpec";
 import { analyzeTranscript } from "./llmSpec";
-import { createBarChart, createPieChart, createLineChart, createBubbleChart } from "./chartSpec";
+import { createBarChart, createPieChart, createLineChart, createBubbleChart, createTopPieChart } from "./chartSpec";
 import { formatAsTxt, formatAsJson, formatAsMd, formatAsYaml, formatAsHtml } from "./outputFormatSpec";
 
-const CHART_TYPES = new Set(["bar", "pie", "line", "bubble"]);
+const CHART_TYPES = new Set(["bar", "pie", "line", "bubble", "top-pie"]);
 const OUTPUT_EXTS = new Set([".txt", ".json", ".md", ".yaml", ".yml", ".html"]);
 
 function getFlagValue(args: string[], name: string): string | undefined {
@@ -54,7 +54,7 @@ async function main() {
 
   if (!pathToTranscriptFile) {
     console.error(
-      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble] [txt|json|md|yaml|html]"
+      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie] [txt|json|md|yaml|html]"
     );
     process.exit(1);
   }
@@ -82,8 +82,10 @@ async function main() {
       createLineChart({ countToWordMap });
     } else if (ct === "bubble") {
       createBubbleChart({ countToWordMap });
+    } else if (ct === "top-pie") {
+      createTopPieChart({ countToWordMap });
     } else {
-      console.error('Unsupported chart type. Use one of: "bar", "pie", "line", "bubble".');
+      console.error('Unsupported chart type. Use one of: "bar", "pie", "line", "bubble", "top-pie".');
       process.exit(1);
     }
   }

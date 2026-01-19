@@ -27,3 +27,9 @@ To scale your AI coding capabilities even further you can use AI developer workf
   NOw you have a technique, to help you scale your ai coding even further. Now you can write re-usable ai coding assitants that solve a specific set of problems very well. 
 
   Using aider we can run everything in architect mode. For this simpler spec prompt with only two steps, we don't need powerfull reasoning model to solve this problem. But it does help to use architect mode to increase accuracy just a little bit and improve the performance of the ai developer workflow. 
+
+  About creating different types of charts:
+
+  This is something that I can just think and hand off to ai assistant workflow. Right? Why? because we solved the problem type completely. That is, the class of problem is solved.  
+
+  As you can see, as we build out our ai coding skills, we're turning into commander of compute 

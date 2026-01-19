@@ -250,3 +250,64 @@ export function createBubbleChart(wordCounts: WordCounts): void {
   const buffer = canvas.toBuffer("image/png");
   writeFileSync("word_count_chart_bubble.png", buffer);
 }
+
+/**
+ * Creates a 'top-pie' pie chart of word counts where the top three words are exploded for emphasis.
+ * The chart is saved as 'word_count_chart_top_pie.png'.
+ * 
+ * This function calculates the total word count, then iterates through each word to draw its
+ * corresponding slice in the pie chart. For the top three most frequent words, the slice is
+ * shifted outwards (exploded) from the center of the chart along its bisector angle to provide visual emphasis.
+ * 
+ * @param wordCounts - The word frequency data to visualize.
+ */
+export function createTopPieChart(wordCounts: WordCounts): void {
+  const entries = computeSortedEntries(wordCounts);
+  const n = entries.length;
+  if (n === 0) return;
+
+  const width = 800;
+  const height = 800;
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+
+  // background
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, width, height);
+
+  const cx = width / 2;
+  const cy = height / 2;
+  const radius = Math.min(width, height) * 0.35;
+  const explodeDistance = 30;
+
+  const total = entries.reduce((acc, [, c]) => acc + c, 0);
+  let angle = -Math.PI / 2;
+
+  for (let i = 0; i < n; i++) {
+    const [, count] = entries[i];
+    const slice = (count / total) * Math.PI * 2;
+    const nextAngle = angle + slice;
+
+    let currentCx = cx;
+    let currentCy = cy;
+
+    // Explode top 3 slices
+    if (i < 3) {
+      const bisectorAngle = angle + slice / 2;
+      currentCx += Math.cos(bisectorAngle) * explodeDistance;
+      currentCy += Math.sin(bisectorAngle) * explodeDistance;
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(currentCx, currentCy);
+    ctx.arc(currentCx, currentCy, radius, angle, nextAngle);
+    ctx.closePath();
+    ctx.fillStyle = quartileColor(i, n);
+    ctx.fill();
+
+    angle = nextAngle;
+  }
+
+  const buffer = canvas.toBuffer("image/png");
+  writeFileSync("word_count_chart_top_pie.png", buffer);
+}

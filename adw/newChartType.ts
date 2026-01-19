@@ -52,7 +52,7 @@ function newChartType(description: string) {
    */
   const command = [
     "aider",
-    "--model gemini/gemini-3-flash-preview",
+    "--model openai/gpt-5",
     "--edit-format architect",
     "--yes",
     "--no-auto-commits",
