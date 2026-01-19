@@ -178,8 +178,9 @@ export function createBubbleChart(wordCounts: WordCounts): void {
   const n = entries.length;
   if (n === 0) return;
 
-  const width = 1000;
-  const height = 1000;
+  // Increased canvas size to accommodate larger bubbles
+  const width = 2000;
+  const height = 2000;
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
 
@@ -189,25 +190,27 @@ export function createBubbleChart(wordCounts: WordCounts): void {
 
   const maxCount = Math.max(...entries.map(([, c]) => c));
   
-  let curX = 60;
-  let curY = 60;
+  // Increased margins and padding x2
+  let curX = 120;
+  let curY = 120;
   let maxRowHeight = 0;
-  const padding = 20;
+  const padding = 40;
 
   entries.forEach(([word, count], i) => {
     // Exaggerate bubble sizes by using a combination of linear and base size
-    const radius = (count / maxCount) * 80 + 20;
+    // Increased sizes x2
+    const radius = ((count / maxCount) * 80 + 20) * 2;
     const diameter = radius * 2;
 
     // Wrap to next row if we exceed canvas width
-    if (curX + diameter > width - 60) {
-      curX = 60;
+    if (curX + diameter > width - 120) {
+      curX = 120;
       curY += maxRowHeight + padding;
       maxRowHeight = 0;
     }
 
     // If we exceed canvas height, we stop drawing
-    if (curY + diameter > height - 60) return;
+    if (curY + diameter > height - 120) return;
 
     const centerX = curX + radius;
     const centerY = curY + radius;
@@ -222,7 +225,7 @@ export function createBubbleChart(wordCounts: WordCounts): void {
     // Draw bubble border
     ctx.globalAlpha = 1.0;
     ctx.strokeStyle = "rgba(0,0,0,0.2)";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     ctx.stroke();
 
     // Overlay the word in the center
@@ -235,7 +238,7 @@ export function createBubbleChart(wordCounts: WordCounts): void {
     
     // Simple text clipping/truncation if word is too long for bubble
     let displayWord = word;
-    if (ctx.measureText(word).width > diameter - 10) {
+    if (ctx.measureText(word).width > diameter - 20) {
         displayWord = word.substring(0, Math.floor(radius / 5)) + "..";
     }
     ctx.fillText(displayWord, centerX, centerY);
