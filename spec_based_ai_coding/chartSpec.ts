@@ -311,3 +311,92 @@ export function createTopPieChart(wordCounts: WordCounts): void {
   const buffer = canvas.toBuffer("image/png");
   writeFileSync("word_count_chart_top_pie.png", buffer);
 }
+
+/**
+ * Creates a radial bar chart of word counts where each word is represented by a bar
+ * arranged around a circle. The angular width of each bar is constant, while its radial
+ * length is proportional to the word count. Bars are colored by frequency quartile
+ * (top=green, bottom=red, middle=blue). Word labels are placed just outside the bar tip.
+ *
+ * Saves the chart as 'word_count_chart_radial_bar.png'.
+ *
+ * @param wordCounts - The word frequency data to visualize.
+ */
+export function createRadialBarChart(wordCounts: WordCounts): void {
+  const entries = computeSortedEntries(wordCounts);
+  const n = entries.length;
+  if (n === 0) return;
+
+  // Canvas setup
+  const width = 1000;
+  const height = 1000;
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, width, height);
+
+  // Geometry
+  const cx = width / 2;
+  const cy = height / 2;
+
+  // Inner radius provides a donut-like center; max bar length fills towards canvas edge
+  const innerRadius = 120;
+  const outerMargin = 40;
+  const maxBarLength = Math.min(width, height) / 2 - innerRadius - outerMargin;
+
+  // Angular spacing: constant bar width with a small angular gap
+  const angleStep = (Math.PI * 2) / n;
+  const gapAngle = Math.min(0.02, angleStep * 0.2); // small gap to separate bars
+
+  // Scale radial length by the maximum count
+  const maxCount = Math.max(...entries.map(([, c]) => c));
+
+  // Render each radial bar
+  for (let i = 0; i < n; i++) {
+    const [word, count] = entries[i];
+    const startAngle = -Math.PI / 2 + i * angleStep + gapAngle / 2;
+    const endAngle = -Math.PI / 2 + (i + 1) * angleStep - gapAngle / 2;
+
+    const barLen = maxCount > 0 ? (count / maxCount) * maxBarLength : 0;
+    const outerRadius = innerRadius + barLen;
+
+    // Draw the bar as a ring sector between innerRadius and outerRadius
+    ctx.beginPath();
+    ctx.arc(cx, cy, outerRadius, startAngle, endAngle);
+    ctx.arc(cx, cy, innerRadius, endAngle, startAngle, true);
+    ctx.closePath();
+    ctx.fillStyle = quartileColor(i, n);
+    ctx.fill();
+
+    // Optional outline for clarity
+    ctx.strokeStyle = "rgba(0,0,0,0.15)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Label: place just beyond the tip of each bar at the mid-angle
+    const midAngle = (startAngle + endAngle) / 2;
+    const labelRadius = outerRadius + 10;
+    const lx = cx + Math.cos(midAngle) * labelRadius;
+    const ly = cy + Math.sin(midAngle) * labelRadius;
+
+    ctx.save();
+    ctx.translate(lx, ly);
+    ctx.rotate(midAngle);
+    ctx.fillStyle = "black";
+    ctx.font = "12px sans-serif";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+
+    // Simple truncation to avoid overly long labels overlapping
+    const maxChars = 14;
+    const label = word.length > maxChars ? word.slice(0, maxChars - 2) + "…" : word;
+    ctx.fillText(label, 0, 0);
+    ctx.restore();
+  }
+
+  // Persist image
+  const buffer = canvas.toBuffer("image/png");
+  writeFileSync("word_count_chart_radial_bar.png", buffer);
+}
