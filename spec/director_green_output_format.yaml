@@ -3,21 +3,12 @@ prompt: |
     CREATE formatAsHtmlGreenGradientTheme() MIRROR existing methods
 
   UPDATE mainSpec.ts:
-    ADD support for the new html format
-    Use `.htmlg` as the output option but save the file as `.html`, that is, output option in CLI should be `.htmlg` but the actual file extension should be `.html`
-    filename should reflect the new format like 'transcript_analysis_green.html'. USE inline CSS in the HTML for the green gradient theme.
+    ADD support for the new html format  use `.htmlg` as the file extension but save the file as .html
 
   UPDATE tests/outputFormatSpec.test.ts:
     ADD test for the new formatAsHtmlGreenGradientTheme() method
-    ADD a test case for the new format function, ensuring it produces HTML with a green gradient theme and includes all required content.
-    DO NOT test for file extension handling in this test file.
-  
-  IMPORTANT:
-  When handling `.htmlg`, ensure the final filename is exactly
-  `transcript_analysis_green.html` (with `.html` extension).
-  Do not rely on path.extname("htmlg") for this conversion.
 
-coder_model: openai/gpt-5-mini
+coder_model: openai/gpt-4o
 
 context_editable:
   - let_the_code_write_itself/mainSpec.ts
