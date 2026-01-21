@@ -10,6 +10,11 @@ prompt: |
   UPDATE tests/outputFormatSpec.test.ts:
     ADD test for the new formatAsHtmlGreenGradientTheme() method
     ADD a test case for the new format function, ensuring it produces HTML with a green gradient theme and includes all required content.
+  
+  IMPORTANT:
+  When handling `.htmlg`, ensure the final filename is exactly
+  `transcript_analysis_green.html` (with `.html` extension).
+  Do not rely on path.extname("htmlg") for this conversion.
 
 coder_model: openai/gpt-5-mini
 
@@ -23,7 +28,7 @@ context_read_only:
 
 execution_command: npx vitest run
 
-max_iterations: 5
+max_iterations: 8
 
 evaluator_model: gpt-5.2
 
