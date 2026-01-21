@@ -82,7 +82,7 @@ export class Director {
     }
 
     throw new Error(
-      `Unsupported config format '${ext}'. Use .yaml, .yml, or .md`
+      `Unsupported config format '${ext}'. Use .yaml, .yml, or .md`,
     );
   }
 
@@ -120,7 +120,7 @@ export class Director {
     iteration: number,
     basePrompt: string,
     executionOutput: string,
-    evaluation: EvaluationResult
+    evaluation: EvaluationResult,
   ): string {
     if (iteration === 0) {
       return basePrompt;
@@ -176,13 +176,28 @@ ${evaluation.feedback}
   private execute(): string {
     this.fileLog(`💻 Executing: ${this.config.execution_command}`);
 
-    const output = execSync(this.config.execution_command, {
-      encoding: "utf-8",
-      stdio: ["ignore", "pipe", "pipe"],
-    });
+    try {
+      const output = execSync(this.config.execution_command, {
+        encoding: "utf-8",
+        stdio: ["ignore", "pipe", "pipe"],
+      });
 
-    this.fileLog(`Execution output:\n${output}`, false);
-    return output;
+      this.fileLog(`Execution output:\n${output}`, false);
+      return output;
+    } catch (err: any) {
+      // execSync throws on non-zero exit code — we must capture output
+      const stdout = err.stdout?.toString() ?? "";
+      const stderr = err.stderr?.toString() ?? "";
+      const combined = `${stdout}\n${stderr}`;
+
+      this.fileLog(
+        `Execution failed (non-zero exit). Captured output:\n${combined}`,
+        false,
+      );
+
+      // IMPORTANT: return output instead of throwing
+      return combined;
+    }
   }
 
   /**
@@ -197,14 +212,14 @@ ${evaluation.feedback}
       this.config.context_editable.map((f) => [
         path.basename(f),
         readFileSync(f, "utf-8"),
-      ])
+      ]),
     );
 
     const readOnlyFiles = Object.fromEntries(
       this.config.context_read_only.map((f) => [
         path.basename(f),
         readFileSync(f, "utf-8"),
-      ])
+      ]),
     );
 
     const evaluationPrompt = `
@@ -240,7 +255,7 @@ Return:
 
     this.fileLog(
       `🔍 Evaluating with model: ${this.config.evaluator_model}`,
-      false
+      false,
     );
 
     try {
@@ -256,7 +271,7 @@ Return:
       return EvaluationResultSchema.parse(JSON.parse(parsed));
     } catch (err) {
       this.fileLog(
-        "⚠️ Evaluator failed, falling back to openai/gpt-5 structured output"
+        "⚠️ Evaluator failed, falling back to openai/gpt-5 structured output",
       );
 
       const fallback = await this.llmClient.chat.completions.create({
@@ -266,7 +281,7 @@ Return:
       });
 
       return EvaluationResultSchema.parse(
-        JSON.parse(fallback.choices[0].message.content!)
+        JSON.parse(fallback.choices[0].message.content!),
       );
     }
   }
@@ -287,7 +302,7 @@ Return:
         i,
         this.config.prompt,
         executionOutput,
-        evaluation
+        evaluation,
       );
 
       this.aiCode(prompt);
@@ -309,7 +324,7 @@ Return:
       this.fileLog(
         `🔄 Continuing… ${
           this.config.max_iterations - i - 1
-        } attempts remaining`
+        } attempts remaining`,
       );
     }
 
@@ -321,24 +336,20 @@ Return:
   }
 }
 
-
-
 if (require.main === module) {
   const configPath = process.argv[2];
 
   if (!configPath) {
     console.error(
-      "Usage: npx tsx director.ts <path-to-director-config.(yaml|md)>"
+      "Usage: npx tsx director.ts <path-to-director-config.(yaml|md)>",
     );
     process.exit(1);
   }
 
   const director = new Director(configPath);
 
-  director
-    .direct()
-    .catch((err) => {
-      console.error("Director failed:", err);
-      process.exit(1);
-    });
+  director.direct().catch((err) => {
+    console.error("Director failed:", err);
+    process.exit(1);
+  });
 }
