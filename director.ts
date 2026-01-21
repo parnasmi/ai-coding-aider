@@ -19,7 +19,7 @@ type EvaluationResult = z.infer<typeof EvaluationResultSchema>;
 const DirectorConfigSchema = z.object({
   prompt: z.string(),
   coder_model: z.string(),
-  evaluator_model: z.enum(["openai/gpt-5", "gemini/gemini-3-pro-preview"]),
+  evaluator_model: z.enum(["gpt-5.2", "gpt-5"]),
   max_iterations: z.number(),
   execution_command: z.string(),
   context_editable: z.array(z.string()),
