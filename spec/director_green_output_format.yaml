@@ -10,6 +10,7 @@ prompt: |
   UPDATE tests/outputFormatSpec.test.ts:
     ADD test for the new formatAsHtmlGreenGradientTheme() method
     ADD a test case for the new format function, ensuring it produces HTML with a green gradient theme and includes all required content.
+    DO NOT test for file extension handling in this test file.
   
   IMPORTANT:
   When handling `.htmlg`, ensure the final filename is exactly
