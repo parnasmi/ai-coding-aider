@@ -27,6 +27,45 @@ export function formatAsTxt(
   return lines.join("\n");
 }
 
+export function formatAsHtmlGreenGradientTheme(
+  transcriptAnalysis: TranscriptAnalysis,
+  wordCounts: WordCounts
+): string {
+  const lines: string[] = [];
+  lines.push("<!DOCTYPE html>");
+  lines.push("<html>");
+  lines.push("<head>");
+  lines.push("<title>Transcript Analysis</title>");
+  lines.push("<style>");
+  lines.push("body { background: linear-gradient(to bottom, #e0f7fa, #00695c); color: #004d40; font-family: Arial, sans-serif; }");
+  lines.push("h1, h2 { color: #004d40; }");
+  lines.push("</style>");
+  lines.push("</head>");
+  lines.push("<body>");
+  lines.push("<h1>Transcript Analysis</h1>");
+  lines.push("<h2>Quick Summary</h2>");
+  lines.push(`<p>${transcriptAnalysis.quick_summary}</p>`);
+  lines.push("<h2>Bullet Point Highlights</h2>");
+  lines.push("<ul>");
+  for (const bp of transcriptAnalysis.bullet_point_highlights) {
+    lines.push(`<li>${bp}</li>`);
+  }
+  lines.push("</ul>");
+  lines.push("<h2>Sentiment Analysis</h2>");
+  lines.push(`<p>${transcriptAnalysis.sentiment_analysis}</p>`);
+  lines.push("<h2>Keywords</h2>");
+  lines.push(`<p>${transcriptAnalysis.keywords.join(", ")}</p>`);
+  lines.push("<h2>Word Counts</h2>");
+  lines.push("<ul>");
+  for (const [word, count] of Object.entries(wordCounts.countToWordMap)) {
+    lines.push(`<li>${word}: ${count}</li>`);
+  }
+  lines.push("</ul>");
+  lines.push("</body>");
+  lines.push("</html>");
+  return lines.join("\n");
+}
+
 export function formatAsJson(
   transcriptAnalysis: TranscriptAnalysis,
   wordCounts: WordCounts

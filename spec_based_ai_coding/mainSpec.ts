@@ -54,7 +54,7 @@ async function main() {
 
   if (!pathToTranscriptFile) {
     console.error(
-      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial-bar>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial-bar] [txt|json|md|yaml|html]"
+      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial-bar>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial-bar] [txt|json|md|yaml|html|htmlg]"
     );
     process.exit(1);
   }
@@ -119,10 +119,13 @@ async function main() {
       content = formatAsMd(analysis, { countToWordMap });
     } else if (ext === ".yaml" || ext === ".yml") {
       content = formatAsYaml(analysis, { countToWordMap });
-    } else if (ext === ".html") {
-      content = formatAsHtml(analysis, { countToWordMap });
+    } else if (ext === ".html" || ext === ".htmlg") {
+      content = ext === ".htmlg"
+        ? formatAsHtmlGreenGradientTheme(analysis, { countToWordMap })
+        : formatAsHtml(analysis, { countToWordMap });
+      outputFilePath = outputFilePath.replace(/\.htmlg$/, ".html");
     } else {
-      console.error('Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html".');
+      console.error('Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html", ".htmlg".');
       process.exit(1);
     }
 

@@ -3,10 +3,10 @@ import { extname } from "path";
 import { wordCounter } from "./wordCounterSpec";
 import { analyzeTranscript } from "./llmSpec";
 import { createBarChart, createPieChart, createLineChart, createBubbleChart, createTopPieChart, createRadialBarChart } from "./chartSpec";
-import { formatAsTxt, formatAsJson, formatAsMd, formatAsYaml, formatAsHtml } from "./outputFormatSpec";
+import { formatAsTxt, formatAsJson, formatAsMd, formatAsYaml, formatAsHtml, formatAsHtmlGreenGradientTheme } from "./outputFormatSpec";
 
 const CHART_TYPES = new Set(["bar", "pie", "line", "bubble", "top-pie", "radial-bar"]);
-const OUTPUT_EXTS = new Set([".txt", ".json", ".md", ".yaml", ".yml", ".html"]);
+const OUTPUT_EXTS = new Set([".txt", ".json", ".md", ".yaml", ".yml", ".html", ".htmlg"]);
 
 function getFlagValue(args: string[], name: string): string | undefined {
   const long = `--${name}`;
@@ -43,18 +43,15 @@ async function main() {
   if (!outputFilePath && nonFlagArgs[3]) {
     const val = nonFlagArgs[3];
     const low = val.toLowerCase().replace(/^\./, "");
-    if (["txt", "json", "md", "yaml", "yml", "html"].includes(low)) {
+    if (["txt", "json", "md", "yaml", "yml", "html", "htmlg"].includes(low)) {
       // bare extension -> default filename
       outputFilePath = `transcript_analysis.${low === "yml" ? "yaml" : low}`;
-    } else {
-      // treat as a path possibly containing an extension
-      outputFilePath = val;
     }
   }
 
   if (!pathToTranscriptFile) {
     console.error(
-      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial-bar>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial-bar] [txt|json|md|yaml|html]"
+      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial-bar>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial-bar] [txt|json|md|yaml|html|htmlg]"
     );
     process.exit(1);
   }
@@ -102,7 +99,7 @@ async function main() {
     // Handle bare extension values like "yaml" (no dot/path)
     if (!ext) {
       const low = outputFilePath.toLowerCase().replace(/^\./, "");
-      if (["txt", "json", "md", "yaml", "yml", "html"].includes(low)) {
+      if (["txt", "json", "md", "yaml", "yml", "html", "htmlg"].includes(low)) {
         ext = low === "yml" ? ".yaml" : `.${low}`;
         if (!/[\/\\]/.test(outputFilePath)) {
           outputFilePath = `transcript_analysis${ext}`;
@@ -121,8 +118,11 @@ async function main() {
       content = formatAsYaml(analysis, { countToWordMap });
     } else if (ext === ".html") {
       content = formatAsHtml(analysis, { countToWordMap });
+    } else if (ext === ".htmlg") {
+      content = formatAsHtmlGreenGradientTheme(analysis, { countToWordMap });
+      outputFilePath = outputFilePath.replace(/\.htmlg$/, ".html");
     } else {
-      console.error('Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html".');
+      console.error('Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html", ".htmlg".');
       process.exit(1);
     }
 
