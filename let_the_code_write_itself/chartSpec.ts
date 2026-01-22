@@ -6,6 +6,71 @@ function computeSortedEntries(wordCounts: WordCounts): [string, number][] {
   return Object.entries(wordCounts.countToWordMap).sort((a, b) => b[1] - a[1]);
 }
 
+export function createRadialBarChart(wordCounts: WordCounts): void {
+  const entries = computeSortedEntries(wordCounts);
+  const n = entries.length;
+  if (n === 0) return;
+
+  const width = 1000;
+  const height = 1000;
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+
+  // background
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, width, height);
+
+  const cx = width / 2;
+  const cy = height / 2;
+  const maxRadius = Math.min(width, height) * 0.4;
+  const total = entries.reduce((acc, [, c]) => acc + c, 0);
+
+  entries.forEach(([word, count], i) => {
+    const radius = (count / total) * maxRadius;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fillStyle = quartileColor(i, n);
+    ctx.fill();
+  });
+
+  const buffer = canvas.toBuffer("image/png");
+  writeFileSync("word_count_chart_radial_bar.png", buffer);
+}
+
+export function createBubbleChart(wordCounts: WordCounts): void {
+  const entries = computeSortedEntries(wordCounts);
+  const n = entries.length;
+  if (n === 0) return;
+
+  const width = 2000;
+  const height = 2000;
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+
+  // background
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, width, height);
+
+  const maxRadius = 50;
+  const total = entries.reduce((acc, [, c]) => acc + c, 0);
+
+  entries.forEach(([word, count], i) => {
+    const radius = (count / total) * maxRadius;
+    const x = Math.random() * (width - 2 * radius) + radius;
+    const y = Math.random() * (height - 2 * radius) + radius;
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fillStyle = quartileColor(i, n);
+    ctx.fill();
+  });
+
+  const buffer = canvas.toBuffer("image/png");
+  writeFileSync("word_count_chart_bubble.png", buffer);
+}
+
 function quartileColor(index: number, total: number): string {
   const q = Math.floor(total / 4);
   if (q > 0) {

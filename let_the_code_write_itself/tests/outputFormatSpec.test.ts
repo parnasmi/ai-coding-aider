@@ -1,4 +1,4 @@
-import { formatAsHtmlGreenGradientTheme } from "../outputFormatSpec";
+import { formatAsHtmlGreenGradientTheme, formatAsHtmlWithSliderFilter } from "../outputFormatSpec";
 import { TranscriptAnalysis, WordCounts } from "../dataTypesSpec";
 
 describe("formatAsHtmlGreenGradientTheme", () => {
@@ -33,5 +33,29 @@ describe("formatAsHtmlGreenGradientTheme", () => {
     expect(result).toContain("<h2>Word Counts</h2>");
     expect(result).toContain("<li>word1: 5</li>");
     expect(result).toContain("<li>word2: 3</li>");
+  });
+});
+
+describe("formatAsHtmlWithSliderFilter", () => {
+  it("should format the transcript analysis and word counts as HTML with a slider filter", () => {
+    const analysis: TranscriptAnalysis = {
+      quick_summary: "This is a quick summary.",
+      bullet_point_highlights: ["Highlight 1", "Highlight 2"],
+      sentiment_analysis: "Positive",
+      keywords: ["keyword1", "keyword2"],
+    };
+
+    const wordCounts: WordCounts = {
+      countToWordMap: {
+        word1: 5,
+        word2: 3,
+      },
+    };
+
+    const result = formatAsHtmlWithSliderFilter(analysis, wordCounts);
+    expect(result).toContain("<!DOCTYPE html>");
+    expect(result).toContain("<input type='range' id='wordThreshold'");
+    expect(result).toContain("<li class='word-count' data-count='5'>word1: 5</li>");
+    expect(result).toContain("<li class='word-count' data-count='3'>word2: 3</li>");
   });
 });

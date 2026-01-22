@@ -125,6 +125,57 @@ export function formatAsYaml(
   return yaml.dump(data);
 }
 
+export function formatAsHtmlWithSliderFilter(
+  transcriptAnalysis: TranscriptAnalysis,
+  wordCounts: WordCounts
+): string {
+  const lines: string[] = [];
+  lines.push("<!DOCTYPE html>");
+  lines.push("<html>");
+  lines.push("<head>");
+  lines.push("<title>Transcript Analysis with Slider</title>");
+  lines.push("<style>");
+  lines.push("body { background: #f0f0f0; color: #333; font-family: Arial, sans-serif; }");
+  lines.push("h1, h2 { color: #333; }");
+  lines.push("input[type='range'] { width: 100%; }");
+  lines.push("</style>");
+  lines.push("<script>");
+  lines.push("function filterWords() {");
+  lines.push("  const threshold = document.getElementById('wordThreshold').value;");
+  lines.push("  const items = document.querySelectorAll('.word-count');");
+  lines.push("  items.forEach(item => {");
+  lines.push("    const count = parseInt(item.dataset.count, 10);");
+  lines.push("    item.style.display = count >= threshold ? 'block' : 'none';");
+  lines.push("  });");
+  lines.push("}");
+  lines.push("</script>");
+  lines.push("</head>");
+  lines.push("<body>");
+  lines.push("<h1>Transcript Analysis</h1>");
+  lines.push("<h2>Quick Summary</h2>");
+  lines.push(`<p>${transcriptAnalysis.quick_summary}</p>`);
+  lines.push("<h2>Bullet Point Highlights</h2>");
+  lines.push("<ul>");
+  for (const bp of transcriptAnalysis.bullet_point_highlights) {
+    lines.push(`<li>${bp}</li>`);
+  }
+  lines.push("</ul>");
+  lines.push("<h2>Sentiment Analysis</h2>");
+  lines.push(`<p>${transcriptAnalysis.sentiment_analysis}</p>`);
+  lines.push("<h2>Keywords</h2>");
+  lines.push(`<p>${transcriptAnalysis.keywords.join(", ")}</p>`);
+  lines.push("<h2>Word Counts</h2>");
+  lines.push("<input type='range' id='wordThreshold' min='1' max='100' value='1' oninput='filterWords()'>");
+  lines.push("<ul>");
+  for (const [word, count] of Object.entries(wordCounts.countToWordMap)) {
+    lines.push(`<li class='word-count' data-count='${count}'>${word}: ${count}</li>`);
+  }
+  lines.push("</ul>");
+  lines.push("</body>");
+  lines.push("</html>");
+  return lines.join("\n");
+}
+
 export function formatAsHtml(
   transcriptAnalysis: TranscriptAnalysis,
   wordCounts: WordCounts
