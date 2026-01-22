@@ -71,7 +71,7 @@ async function main() {
   if (!outputFilePath && nonFlagArgs[3]) {
     const val = nonFlagArgs[3];
     const low = val.toLowerCase().replace(/^\./, "");
-    if (["txt", "json", "md", "yaml", "yml", "html", "htmlg"].includes(low)) {
+    if (["txt", "json", "md", "yaml", "yml", "html", "htmlg", "htmlsld"].includes(low)) {
       // bare extension -> default filename
       outputFilePath = `transcript_analysis.${low === "yml" ? "yaml" : low}`;
     }
@@ -149,7 +149,6 @@ async function main() {
     } else if (ext === ".htmlsld") {
       content = formatAsHtmlWithSliderFilter(analysis, { countToWordMap });
       outputFilePath = outputFilePath.replace(/\.htmlsld$/, ".html");
-      ext = ".html"; // Ensure the extension is set to .html for consistency
     } else {
       console.error(
         'Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html", ".htmlg", ".htmlsld".',
