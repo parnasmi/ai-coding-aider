@@ -7,6 +7,8 @@ import {
   createPieChart,
   createLineChart,
   createTopPieChart,
+  createRadialBarChart,
+  createBubbleChart,
 } from "./chartSpec";
 import {
   formatAsTxt,
@@ -15,9 +17,10 @@ import {
   formatAsYaml,
   formatAsHtml,
   formatAsHtmlGreenGradientTheme,
+  formatAsHtmlWithSliderFilter,
 } from "./outputFormatSpec";
 
-const CHART_TYPES = new Set(["bar", "pie", "line", "top-pie"]);
+const CHART_TYPES = new Set(["bar", "pie", "line", "top-pie", "radial", "bubble"]);
 const OUTPUT_EXTS = new Set([
   ".txt",
   ".json",
@@ -25,6 +28,7 @@ const OUTPUT_EXTS = new Set([
   ".yaml",
   ".yml",
   ".html",
+  ".htmlsld",
   ".htmlg",
 ]);
 
@@ -75,7 +79,7 @@ async function main() {
 
   if (!pathToTranscriptFile) {
     console.error(
-      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial-bar>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial-bar] [txt|json|md|yaml|html|htmlg]",
+      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial] [txt|json|md|yaml|html|htmlg]",
     );
     process.exit(1);
   }
@@ -93,6 +97,10 @@ async function main() {
     console.log(`${word}: ${"#".repeat(count as any)}`);
   }
 
+  // Analyze transcript and print the structured result
+  const analysis = await analyzeTranscript(transcript, countToWordMap);
+  console.log("Transcript Analysis:", analysis);
+
   if (chartType) {
     const ct = String(chartType).toLowerCase();
     if (ct === "bar") {
@@ -103,17 +111,12 @@ async function main() {
       createLineChart({ countToWordMap });
     } else if (ct === "top-pie") {
       createTopPieChart({ countToWordMap });
-    } else {
-      console.error(
-        'Unsupported chart type. Use one of: "bar", "pie", "line", "top-pie".',
-      );
-      process.exit(1);
+    } else if (ct === "radial") {
+      createRadialBarChart({ countToWordMap });
+    } else if (ct === "bubble") {
+      createBubbleChart({ countToWordMap });
     }
   }
-
-  // Analyze transcript and print the structured result
-  const analysis = await analyzeTranscript(transcript, countToWordMap);
-  console.log("Transcript Analysis:", analysis);
 
   if (outputFilePath) {
     let ext = extname(outputFilePath).toLowerCase();
@@ -121,7 +124,7 @@ async function main() {
     // Handle bare extension values like "yaml" (no dot/path)
     if (!ext) {
       const low = outputFilePath.toLowerCase().replace(/^\./, "");
-      if (["txt", "json", "md", "yaml", "yml", "html", "htmlg"].includes(low)) {
+      if (["txt", "json", "md", "yaml", "yml", "html", "htmlg", "htmlsld"].includes(low)) {
         ext = low === "yml" ? ".yaml" : `.${low}`;
         if (!/[\/\\]/.test(outputFilePath)) {
           outputFilePath = `transcript_analysis${ext}`;
@@ -143,9 +146,12 @@ async function main() {
     } else if (ext === ".htmlg") {
       content = formatAsHtmlGreenGradientTheme(analysis, { countToWordMap });
       outputFilePath = outputFilePath.replace(/\.htmlg$/, ".html");
+    } else if (ext === ".htmlsld") {
+      content = formatAsHtmlWithSliderFilter(analysis, { countToWordMap });
+      outputFilePath = outputFilePath.replace(/\.htmlsld$/, ".html");
     } else {
       console.error(
-        'Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html", ".htmlg".',
+        'Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html", ".htmlg", ".htmlsld".',
       );
       process.exit(1);
     }
