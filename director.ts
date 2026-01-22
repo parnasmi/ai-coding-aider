@@ -42,6 +42,8 @@ export class Director {
     this.config = this.validateConfig(configPath);
     this.llmClient = new OpenAI();
     this.logFile = path.join(process.cwd(), "director.log");
+
+    console.log(" this.config", this.config);
   }
 
   /* ================================
@@ -127,20 +129,20 @@ export class Director {
     }
 
     return `
-# Generate the next iteration of code based on feedback.
+              # Generate the next iteration of code based on feedback.
 
-## Attempt ${iteration + 1}
-You have ${this.config.max_iterations - iteration} attempts remaining.
+              ## Attempt ${iteration + 1}
+              You have ${this.config.max_iterations - iteration} attempts remaining.
 
-## Original Instructions
-${basePrompt}
+              ## Original Instructions
+              ${basePrompt}
 
-## Previous Execution Output
-${executionOutput}
+              ## Previous Execution Output
+              ${executionOutput}
 
-## Feedback
-${evaluation.feedback}
-`.trim();
+              ## Feedback
+              ${evaluation.feedback}
+            `.trim();
   }
 
   /**
@@ -180,7 +182,7 @@ ${evaluation.feedback}
       const output = execSync(this.config.execution_command, {
         encoding: "utf-8",
         stdio: ["ignore", "pipe", "pipe"],
-      }); 
+      });
 
       this.fileLog(`Execution output:\n${output}`, false);
       return output;
@@ -224,35 +226,35 @@ ${evaluation.feedback}
     );
 
     const evaluationPrompt = `
-Evaluate whether the task is complete.
+                                Evaluate whether the task is complete.
 
-## User Desired Result
-${this.config.prompt}
+                                ## User Desired Result
+                                ${this.config.prompt}
 
-## Editable Files
-${JSON.stringify(editableFiles, null, 2)}
+                                ## Editable Files
+                                ${JSON.stringify(editableFiles, null, 2)}
 
-## Read-Only Files
-${JSON.stringify(readOnlyFiles, null, 2)}
+                                ## Read-Only Files
+                                ${JSON.stringify(readOnlyFiles, null, 2)}
 
-## Execution Command
-${this.config.execution_command}
+                                ## Execution Command
+                                ${this.config.execution_command}
 
-## Execution Output
-${executionOutput}
+                                ## Execution Output
+                                ${executionOutput}
 
-## Instructions
-- Ignore warnings
-- Output JSON only
-- No markdown
-- No explanations
+                                ## Instructions
+                                - Ignore warnings
+                                - Output JSON only
+                                - No markdown
+                                - No explanations
 
-Return:
-{
-  "success": boolean,
-  "feedback": string | null
-}
-`.trim();
+                                Return:
+                                {
+                                  "success": boolean,
+                                  "feedback": string | null
+                                }
+                            `.trim();
 
     this.fileLog(
       `🔍 Evaluating with model: ${this.config.evaluator_model}`,
