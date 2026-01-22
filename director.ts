@@ -180,7 +180,7 @@ ${evaluation.feedback}
       const output = execSync(this.config.execution_command, {
         encoding: "utf-8",
         stdio: ["ignore", "pipe", "pipe"],
-      });
+      }); 
 
       this.fileLog(`Execution output:\n${output}`, false);
       return output;
@@ -194,6 +194,7 @@ ${evaluation.feedback}
         `Execution failed (non-zero exit). Captured output:\n${combined}`,
         false,
       );
+      console.log("combined", combined);
 
       // IMPORTANT: return output instead of throwing
       return combined;
