@@ -6,3 +6,20 @@
 
  We are becoming curators of code, We are becoming curators of workflows, We are becoming lead engineers, engineer managers we are moving ourselves up the stack and we hading off the low-level codes, details, the how we are handing that all of that ai coding assistants.
 
+ The director pattern requires a deep understanding of your code as well as the expertise needed to plan outwork in advance. The spec documents, the ia dev workflows, none of these matters if you can't plan out the future end-to-end. or at least a good chunk of future. 
+
+And when you learn when to use the director pattern you will find how powerfull this can be future ai coding tools will embed this pattern or patterns like this. 
+  
+A massive side effect of models improving and tools like aider existing we can plan mush more work than we think. Especially with next generation models, specifically reasoning models. 
+
+The pattern with code  seize the output of itself. This pattern hints at the future of ai coding. it means that engineers that understand what do they want to accomplish from start to finish can hand of nearly entire process  to a self directed ai coding assistant. It means planning is the key to great engineering. it means, knowing how to evaluate what you can do is your key to a great engineering. it means writing  high quality ai coding prompts gathering the right context and selecting the right models are foundational ai coding skills as we know from the lessons of this course. 
+
+The implication of this pattern and th spec prompt and adws means that you can now will ai coding assistant like never before. it means you can close  the loop and let the code write itself. Tak ethis principles take this pattern, take this techniques and ai coding like never before. 
+
+The largest limitation of this pattern is that if your execution command does not provide feedback output, this pattern will not work. In addition to wring propmt, planning out big three the task is now you to create solid feedback for you ai coding assistant. 
+
+writing texts from 37:43 - 39:40 time. 
+
+The biggest thing i wanna highlight once again - GREAT PLANNING - is GREAT PROMPTING. You can see that now we close the loop and let the code write itself. but it's not useful it's not efficient if you don't write greate plans packed with idk prompts. THis is going to be a continueing trend in the age of generative ai. Those you can write more plans, thise can write clearly, those can translate their thought into llm compatible format like the spec prompt will receive assimetric results.  GREAT PLANNING - is GREAT PROMPTING. ANd great prompting enables you obtain an assimetrix results before anyone else.  
+
+These are techniques you can use today, right now. The most important think you can do is start. Practice this patterns. You will feel your engineering shift from the how to the what. And internalize the fact the GREAT PLANNING - is GREAT PROMPTING. If you ready close the loop, let the code write itself. Take th edirector pattern - make it your own. Fine tune it , tweak it to fit it into your codebases that you end in dayly basis.  
