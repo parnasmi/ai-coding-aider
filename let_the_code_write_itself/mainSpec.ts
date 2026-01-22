@@ -149,7 +149,6 @@ async function main() {
     } else if (ext === ".htmlsld") {
       content = formatAsHtmlWithSliderFilter(analysis, { countToWordMap });
       outputFilePath = outputFilePath.replace(/\.htmlsld$/, ".html");
-      ext = ".html"; // Ensure the extension is set to .html for consistency
     } else {
       console.error(
         'Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html", ".htmlg", ".htmlsld".',
