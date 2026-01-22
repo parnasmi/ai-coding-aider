@@ -1,25 +1,44 @@
-## Let the Code Write Itself
+Let the Code Write Itself
+The Director Pattern
 
- Director Pattern, also known as Director loop. This is an agentic workflow, where you define a context, prompt and model  as usual and then you define execution  command and a eveluator. These are 2 missings pieces,  you need to close the loop. Your execution command runs after your ai coding assistant generated code and then your eveluator takes the output of your execution command and determines if the task is done. if your task is not completed, it creates feedbac and loops back to your ai coding assistant, closing the loop. An eveluator can be a piece of code, but we are going to focus on eveluators that are themselves llms calls. this is a pattern from language model testing, you may heard 'llm as judge'. Or you have a llm grade output of another llm. We this pattern we close the loop. Because now you can write a prompt, have your ai coding assistant generate code , execute the code, eveluate the code and if the eveluation fails, pass the feedback back to  ai coding assistant. This pattern is the prototype to the future of the ai to the future let the code write itself. By building upon patterns we established and the ai developer workflow of spec prompt , in this lesson, we close the loop by giving our  ai coding assistant feedback through an eveluator function. With this pattern, even its early form, we are approaching edge of ai coding. ANd potentially edge of software engineering as we know it. This pattern enables ai coding tools to act in a more autonomous way. solving your problems iteratively until it's complete. Next generation ai coding tools like deven and github's copilot workspace rely on patterns,like director pattern run autonomously. 
+The Director Pattern, also known as the Director Loop, is an agentic workflow. In this pattern, you define a context, a prompt, and a model as usual, but you also define an execution command and an evaluator. These are the two missing pieces required to close the loop.
 
- We have agentic ai coding workflow that runs code based on great plan that we have been building up on the  knowledge skills  to know how to build and then we're handing off the coding process to out director pattern, to our ai coding assistant tool. We are small ai agent team here. 
+Your execution command runs immediately after your AI coding assistant generates code. The evaluator then takes the output of that execution command and determines if the task is complete. If the task is not finished, the evaluator creates feedback and loops back to the AI assistant, closing the loop. While an evaluator can be a simple piece of code, we focus on evaluators that are LLM calls themselves—a pattern often called "LLM-as-a-Judge." By using one LLM to grade the output of another, we close the loop. You can now write a prompt, have the assistant generate code, execute that code, and evaluate it. If the evaluation fails, the feedback is passed back to the assistant to try again. This pattern is the prototype for the future of AI: letting the code write itself.
 
- We are becoming curators of code, We are becoming curators of workflows, We are becoming lead engineers, engineer managers we are moving ourselves up the stack and we hading off the low-level codes, details, the how we are handing that all of that ai coding assistants.
+Approaching the Edge of Engineering
 
- The director pattern requires a deep understanding of your code as well as the expertise needed to plan outwork in advance. The spec documents, the ia dev workflows, none of these matters if you can't plan out the future end-to-end. or at least a good chunk of future. 
+By building upon the patterns we have established—specifically the AI developer workflow and the Spec Prompt—we close the loop by providing the AI assistant with feedback through an evaluator function. With this pattern, even in its early form, we are approaching the edge of AI coding and, potentially, the edge of software engineering as we know it.
 
-And when you learn when to use the director pattern you will find how powerfull this can be future ai coding tools will embed this pattern or patterns like this. 
-  
-A massive side effect of models improving and tools like aider existing we can plan mush more work than we think. Especially with next generation models, specifically reasoning models. 
+This pattern enables AI coding tools to act autonomously, solving problems iteratively until they are complete. Next-generation tools like Devin and GitHub Copilot Workspace rely on autonomous patterns similar to the Director Pattern.
 
-The pattern with code  seize the output of itself. This pattern hints at the future of ai coding. it means that engineers that understand what do they want to accomplish from start to finish can hand of nearly entire process  to a self directed ai coding assistant. It means planning is the key to great engineering. it means, knowing how to evaluate what you can do is your key to a great engineering. it means writing  high quality ai coding prompts gathering the right context and selecting the right models are foundational ai coding skills as we know from the lessons of this course. 
+Moving Up the Stack
 
-The implication of this pattern and th spec prompt and adws means that you can now will ai coding assistant like never before. it means you can close  the loop and let the code write itself. Tak ethis principles take this pattern, take this techniques and ai coding like never before. 
+We are becoming curators of code and workflows. As lead engineers and engineering managers, we are moving ourselves "up the stack." We are handing off low-level code, the minute details, and the "how" to AI coding assistants. We are operating as a small AI agent team.
 
-The largest limitation of this pattern is that if your execution command does not provide feedback output, this pattern will not work. In addition to wring propmt, planning out big three the task is now you to create solid feedback for you ai coding assistant. 
+The Director Pattern requires a deep understanding of your codebase and the expertise to plan work in advance. Spec documents and AI workflows don't matter if you cannot plan the future end-to-end—or at least a significant chunk of it. When you learn when to use the Director Pattern, you will realize how powerful it is.
 
-writing texts from 37:43 - 39:40 time. 
+The Future of Planning
 
-The biggest thing i wanna highlight once again - GREAT PLANNING - is GREAT PROMPTING. You can see that now we close the loop and let the code write itself. but it's not useful it's not efficient if you don't write greate plans packed with idk prompts. THis is going to be a continueing trend in the age of generative ai. Those you can write more plans, thise can write clearly, those can translate their thought into llm compatible format like the spec prompt will receive assimetric results.  GREAT PLANNING - is GREAT PROMPTING. ANd great prompting enables you obtain an assimetrix results before anyone else.  
+A massive side effect of improving models and tools like Aider is that we can now plan much more work than we previously thought possible. This is especially true with next-generation reasoning models.
 
-These are techniques you can use today, right now. The most important think you can do is start. Practice this patterns. You will feel your engineering shift from the how to the what. And internalize the fact the GREAT PLANNING - is GREAT PROMPTING. If you ready close the loop, let the code write itself. Take th edirector pattern - make it your own. Fine tune it , tweak it to fit it into your codebases that you end in dayly basis.  
+The pattern of "code that sees its own output" hints at the future of programming. Engineers who understand exactly what they want to accomplish from start to finish can hand off nearly the entire process to a self-directed AI assistant. This shift means:
+
+Planning is the key to great engineering.
+
+Knowing how to evaluate work is the key to leadership.
+
+Writing high-quality prompts, gathering context, and selecting models are the foundational skills of the modern engineer.
+
+The implication of the Director Pattern, the Spec Prompt, and AI-driven workflows is that you can now wield an AI assistant like never before.
+
+Limitations and Critical Success Factors
+
+The largest limitation of this pattern is the feedback loop: if your execution command does not provide clear feedback output, the pattern will fail. In addition to writing the prompt and planning the "Big Three" tasks, it is now your job to create solid feedback mechanisms.
+
+The most important takeaway is this: Great Planning is Great Prompting. Closing the loop is only efficient if your plans are packed with high-quality prompts. This is a continuing trend in the age of Generative AI. Those who can plan more extensively, write clearly, and translate their thoughts into LLM-compatible formats—like the Spec Prompt—will achieve asymmetric results.
+
+Conclusion
+
+These are techniques you can use right now. The most important thing you can do is start. Practice these patterns. You will feel your engineering focus shift from the "how" to the "what."
+
+Internalize the fact that Great Planning is Great Prompting. If you are ready to close the loop and let the code write itself, take the Director Pattern and make it your own. Fine-tune it and tweak it to fit the codebases you work in every day.
