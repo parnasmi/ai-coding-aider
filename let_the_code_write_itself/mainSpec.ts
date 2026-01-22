@@ -2,11 +2,31 @@ import { readFile, writeFile } from "fs/promises";
 import { extname } from "path";
 import { wordCounter } from "./wordCounterSpec";
 import { analyzeTranscript } from "./llmSpec";
-import { createBarChart, createPieChart, createLineChart, createBubbleChart, createTopPieChart, createRadialBarChart } from "./chartSpec";
-import { formatAsTxt, formatAsJson, formatAsMd, formatAsYaml, formatAsHtml, formatAsHtmlGreenGradientTheme } from "./outputFormatSpec";
+import {
+  createBarChart,
+  createPieChart,
+  createLineChart,
+  createTopPieChart,
+} from "./chartSpec";
+import {
+  formatAsTxt,
+  formatAsJson,
+  formatAsMd,
+  formatAsYaml,
+  formatAsHtml,
+  formatAsHtmlGreenGradientTheme,
+} from "./outputFormatSpec";
 
-const CHART_TYPES = new Set(["bar", "pie", "line", "bubble", "top-pie", "radial-bar"]);
-const OUTPUT_EXTS = new Set([".txt", ".json", ".md", ".yaml", ".yml", ".html", ".htmlg"]);
+const CHART_TYPES = new Set(["bar", "pie", "line", "top-pie"]);
+const OUTPUT_EXTS = new Set([
+  ".txt",
+  ".json",
+  ".md",
+  ".yaml",
+  ".yml",
+  ".html",
+  ".htmlg",
+]);
 
 function getFlagValue(args: string[], name: string): string | undefined {
   const long = `--${name}`;
@@ -36,7 +56,11 @@ async function main() {
   const nonFlagArgs = args.filter((a) => !a.startsWith("--"));
   let chartType = chartTypeFromFlag?.toLowerCase();
 
-  if (!chartType && nonFlagArgs[2] && CHART_TYPES.has(nonFlagArgs[2].toLowerCase())) {
+  if (
+    !chartType &&
+    nonFlagArgs[2] &&
+    CHART_TYPES.has(nonFlagArgs[2].toLowerCase())
+  ) {
     chartType = nonFlagArgs[2].toLowerCase();
   }
 
@@ -51,7 +75,7 @@ async function main() {
 
   if (!pathToTranscriptFile) {
     console.error(
-      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial-bar>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial-bar] [txt|json|md|yaml|html|htmlg]"
+      "Usage: tsx spec_based_ai_coding/mainSpec.ts <path-to-transcript> [minCountThreshold] [--chart <bar|pie|line|bubble|top-pie|radial-bar>|--chart=pie] [--output-file <path>|--output-file=json]\nAlso supports positional: <path> <threshold> [bar|pie|line|bubble|top-pie|radial-bar] [txt|json|md|yaml|html|htmlg]",
     );
     process.exit(1);
   }
@@ -63,7 +87,7 @@ async function main() {
 
   // Count and filter word frequencies
   const { countToWordMap } = wordCounter(transcript, minCountThreshold);
-  
+
   // Print word frequencies as "<word>: ###" where # is repeated count times
   for (const [word, count] of Object.entries(countToWordMap)) {
     console.log(`${word}: ${"#".repeat(count as any)}`);
@@ -77,14 +101,12 @@ async function main() {
       createPieChart({ countToWordMap });
     } else if (ct === "line") {
       createLineChart({ countToWordMap });
-    } else if (ct === "bubble") {
-      createBubbleChart({ countToWordMap });
     } else if (ct === "top-pie") {
       createTopPieChart({ countToWordMap });
-    } else if (ct === "radial-bar") {
-      createRadialBarChart({ countToWordMap });
     } else {
-      console.error('Unsupported chart type. Use one of: "bar", "pie", "line", "bubble", "top-pie", "radial-bar".');
+      console.error(
+        'Unsupported chart type. Use one of: "bar", "pie", "line", "top-pie".',
+      );
       process.exit(1);
     }
   }
@@ -122,7 +144,9 @@ async function main() {
       content = formatAsHtmlGreenGradientTheme(analysis, { countToWordMap });
       outputFilePath = outputFilePath.replace(/\.htmlg$/, ".html");
     } else {
-      console.error('Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html", ".htmlg".');
+      console.error(
+        'Unsupported output file extension. Use one of: ".txt", ".json", ".md", ".yaml", ".html", ".htmlg".',
+      );
       process.exit(1);
     }
 
