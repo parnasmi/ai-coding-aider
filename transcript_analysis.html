@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Transcript Analysis with Slider</title>
+<style>
+body { background: #f0f0f0; color: #333; font-family: Arial, sans-serif; }
+h1, h2 { color: #333; }
+input[type='range'] { width: 100%; }
+</style>
+<script>
+function filterWords() {
+  const threshold = document.getElementById('wordThreshold').value;
+  const items = document.querySelectorAll('.word-count');
+  items.forEach(item => {
+    const count = parseInt(item.dataset.count, 10);
+    item.style.display = count >= threshold ? 'block' : 'none';
+  });
+}
+</script>
+</head>
+<body>
+<h1>Transcript Analysis</h1>
+<h2>Quick Summary</h2>
+<p>The transcript describes the Orchestrator Pattern in AI-driven software development, where AI agents handle automated tasks while human developers focus on creative and complex work. This paradigm utilizes voice interfaces and background agents running in isolated environments to increase productivity and maintain velocity in software projects.</p>
+<h2>Bullet Point Highlights</h2>
+<ul>
+<li>The Orchestrator Pattern shifts from traditional software development to managing AI agents for routine tasks.</li>
+<li>Human developers focus on high-value work like product direction and architecture.</li>
+<li>AI agents perform maintenance tasks such as dependency upgrades and CSS fixes.</li>
+<li>Voice input, using tools like WisprFlow, enables seamless task delegation at high speed.</li>
+<li>Effective delegation involves clear task briefs with specific success criteria.</li>
+<li>A robust CI/CD pipeline ensures safety and quality control.</li>
+<li>Humans remain crucial for setting direction, reviewing outputs, and handling exceptions.</li>
+</ul>
+<h2>Sentiment Analysis</h2>
+<p>The transcript expresses a positive and forward-thinking sentiment towards the use of AI agents in software development. It highlights increased efficiency, safety, and flexibility through the use of AI orchestration and voice interfaces.</p>
+<h2>Keywords</h2>
+<p>Orchestrator Pattern, AI agents, software development, voice input, Cursor, WisprFlow, CI/CD pipeline, task delegation, agentic coding, product vision</p>
+<h2>Word Counts</h2>
+<input type='range' id='wordThreshold' min='1' max='100' value='1' oninput='filterWords()'>
+<ul>
+<li class='word-count' data-count='25'>agents: 25</li>
+<li class='word-count' data-count='22'>agent: 22</li>
+<li class='word-count' data-count='16'>pattern: 16</li>
+<li class='word-count' data-count='16'>work: 16</li>
+<li class='word-count' data-count='15'>voice: 15</li>
+<li class='word-count' data-count='13'>review: 13</li>
+<li class='word-count' data-count='12'>orchestrator: 12</li>
+<li class='word-count' data-count='12'>development: 12</li>
+<li class='word-count' data-count='12'>cursor: 12</li>
+</ul>
+</body>
+</html>

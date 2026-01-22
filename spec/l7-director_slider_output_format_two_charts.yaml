@@ -1,0 +1,23 @@
+prompt: "spec/l7-spec-feature_new_slider_html_output_and_charts.md"
+
+# Aider model (can be GPT-4o / GPT-5-mini / Gemini)
+coder_model: "openai/gpt-4o"
+
+context_editable:
+  - "let_the_code_write_itself/mainSpec.ts"
+  - "let_the_code_write_itself/outputFormatSpec.ts"
+  - "let_the_code_write_itself/chartSpec.ts"
+  - "let_the_code_write_itself/tests/outputFormatSpec.test.ts"
+  - "let_the_code_write_itself/tests/chartSpec.test.ts"
+
+context_read_only:
+  - "let_the_code_write_itself/dataTypesSpec.ts"
+
+# Node / TS test runner
+execution_command: "npx vitest run"
+
+max_iterations: 5
+
+# Evaluator MUST be an OpenAI API model (SDK-compatible)
+evaluator_model: "gpt-5.2"
+evaluator: "default"

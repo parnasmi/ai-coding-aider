@@ -1,0 +1,27 @@
+prompt: |
+  UPDATE outputFormatSpec.ts:
+    CREATE formatAsHtmlGreenGradientTheme() MIRROR existing methods
+
+  UPDATE mainSpec.ts:
+    ADD support for the new html format  use `.htmlg` as the file extension but save the file as .html
+
+  UPDATE tests/outputFormatSpec.test.ts:
+    ADD test for the new formatAsHtmlGreenGradientTheme() method
+
+coder_model: openai/gpt-4o
+
+context_editable:
+  - let_the_code_write_itself/mainSpec.ts
+  - let_the_code_write_itself/outputFormatSpec.ts
+  - let_the_code_write_itself/tests/outputFormatSpec.test.ts
+
+context_read_only:
+  - let_the_code_write_itself/dataTypesSpec.ts
+
+execution_command: npx vitest run
+
+max_iterations: 8
+
+evaluator_model: gpt-5.2
+
+evaluator: default

@@ -14,3 +14,10 @@
   - `uv run main analyze-transcript transcript.txt --output-file output_transcript.yaml`
 - Run director:
   - `uv run python director.py --config specs/director_green_output_format.yaml`
+
+
+In ts
+- Run the script:
+  - `npx tsx let_the_code_write_itself/mainSpec.ts transcript-3.txt 10 bar htmlg`
+- Run director:
+  - `npx tsx director.ts spec/director_green_output_format.yaml  `
